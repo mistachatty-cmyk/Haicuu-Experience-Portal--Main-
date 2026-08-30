@@ -23,7 +23,7 @@ import {
 } from 'lucide-react';
 import logoImage from '@assets/IMG_9314_1788103115409.jpeg';
 import posterImage from '@assets/IMG_9313_1788103115409.jpeg';
-import bannerImage from '@assets/IMG_9311_1788103115409.jpeg';
+import masqueradeImage from '@assets/IMG_9478_1788104999100.jpeg';
 
 type Track = { id: number; title: string; artist: string; note: string; link: string };
 type GalleryItem = { id: number; src: string; alt: string; caption: string; tone: string };
@@ -57,17 +57,17 @@ const initialTracks: Track[] = [
 
 const initialGallery: GalleryItem[] = [
   { id: 1, src: posterImage, alt: 'A pastel poster for The Haiku Experience', caption: 'the invitation / 2024', tone: 'rotate-[-2deg]' },
-  { id: 2, src: bannerImage, alt: 'The Haiku Experience banner beneath a pink flowering tree', caption: 'somewhere warm / 01', tone: 'rotate-[1.5deg]' },
+  { id: 2, src: masqueradeImage, alt: 'The Masquerade of Words event artwork for The Haicuu Experience', caption: 'the next mask / september 11', tone: 'rotate-[1.5deg]' },
   { id: 3, src: logoImage, alt: 'The Llama State Productions circular logo', caption: 'the keeper / est. 1998', tone: 'rotate-[-1deg]' },
 ];
 
 const initialEvents: ExperienceEvent[] = [
   {
     id: 1,
-    name: 'The September Room',
-    date: '2026-09-19',
-    time: '6:30 PM',
-    venue: 'The Llama House',
+    name: 'The Masquerade of Words',
+    date: '2026-09-11',
+    time: 'TBA',
+    venue: "Teller's Lounge",
     price: 28,
     earlyBirdPrice: 22,
     earlyBirdCutoff: '2026-09-05',
@@ -83,6 +83,25 @@ const initialEvents: ExperienceEvent[] = [
     earlyBirdCutoff: '2026-10-01',
   },
 ];
+
+function readExperienceEvents() {
+  const stored = readStored<ExperienceEvent[] | null>(EVENTS_STORAGE_KEY, null);
+  if (!stored?.length) return initialEvents;
+  if (stored.some((event) => event.date === '2026-09-11' || event.name === 'The Masquerade of Words')) return stored;
+
+  const legacyFeatured = stored.find((event) => event.id === initialEvents[0].id || event.date === '2026-09-19');
+  const migratedFeatured = {
+    ...initialEvents[0],
+    ...(legacyFeatured ? {
+      id: legacyFeatured.id,
+      price: legacyFeatured.price,
+      earlyBirdPrice: legacyFeatured.earlyBirdPrice,
+      earlyBirdCutoff: legacyFeatured.earlyBirdCutoff,
+    } : {}),
+  };
+
+  return [migratedFeatured, ...stored.filter((event) => event.id !== legacyFeatured?.id)];
+}
 
 const initialOfferSettings: OfferSettings = {
   contactDiscountEnabled: true,
@@ -126,8 +145,8 @@ function App() {
   const [purchaseOpen, setPurchaseOpen] = useState(false);
   const [tickets, setTickets] = useState(1);
   const [reserved, setReserved] = useState(false);
-  const [events, setEvents] = useState<ExperienceEvent[]>(() => readStored(EVENTS_STORAGE_KEY, initialEvents));
-  const [selectedEventId, setSelectedEventId] = useState(() => readStored<ExperienceEvent[]>(EVENTS_STORAGE_KEY, initialEvents)[0]?.id ?? initialEvents[0].id);
+  const [events, setEvents] = useState<ExperienceEvent[]>(readExperienceEvents);
+  const [selectedEventId, setSelectedEventId] = useState(() => readExperienceEvents()[0]?.id ?? initialEvents[0].id);
   const [offerSettings, setOfferSettings] = useState<OfferSettings>(() => readStored(OFFERS_STORAGE_KEY, initialOfferSettings));
   const [contactValue, setContactValue] = useState('');
   const [contactError, setContactError] = useState('');
@@ -302,15 +321,22 @@ function App() {
         </div>
          <div className="relative mx-auto grid max-w-[1320px] gap-12 lg:grid-cols-[.86fr_1.14fr] lg:items-center lg:gap-16">
           <div className="relative z-10 max-w-[560px]">
-            <div className="reveal flex items-center gap-3 font-mono-custom text-[10px] uppercase tracking-[.2em] text-[#7f1c67]">
-              <span className="pulse-dot h-2 w-2 rounded-full bg-[#ee4da7]" /> A soft gathering by Llama State Productions
+             <div className="reveal flex items-center gap-3 font-mono-custom text-[10px] uppercase tracking-[.2em] text-[#7f1c67]">
+               <span className="pulse-dot h-2 w-2 rounded-full bg-[#ee4da7]" /> Next gathering / September 11, 2026
             </div>
              <h1 className="hero-title reveal reveal-delay-1 mt-7 font-display text-[clamp(5.4rem,14vw,12.5rem)] font-semibold text-[#42194c] lg:text-[clamp(6rem,11vw,11rem)]">
               Haiku<br /><span className="ml-[.18em] text-[#e94fa9]">Experience</span>
             </h1>
-            <p className="reveal reveal-delay-2 mt-9 max-w-[390px] font-display text-[1.35rem] leading-[1.15] text-[#613b68] md:text-[1.55rem]">
-              A little music, a little magic, and a place to put your phone down.
+             <p className="reveal reveal-delay-2 mt-9 max-w-[430px] font-display text-[1.35rem] leading-[1.15] text-[#613b68] md:text-[1.55rem]">
+               The Haicuu Experience returns with a night of masks, words, and beautiful surprises at Teller&apos;s Lounge.
             </p>
+             <div className="reveal reveal-delay-2 mt-7 max-w-[430px] rounded-[1.2rem] border border-[#7f1c67]/15 bg-[#fff0df]/45 p-4 backdrop-blur-sm">
+               <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+                 <p className="font-display text-2xl text-[#42194c]">The Masquerade of Words</p>
+                 <span className="font-mono-custom text-[9px] uppercase tracking-[.14em] text-[#7f1c67]">dress / suit / mask</span>
+               </div>
+               <p className="mt-2 font-mono-custom text-[10px] uppercase tracking-[.14em] text-[#795b7a]">September 11 · Teller&apos;s Lounge · time to be announced</p>
+             </div>
             <div className="reveal reveal-delay-3 mt-9 flex flex-wrap items-center gap-4">
                <button onClick={() => setPurchaseOpen(true)} className="group pressable inline-flex items-center gap-3 rounded-full bg-[#42194c] px-6 py-3.5 text-xs font-bold uppercase tracking-[.12em] text-[#ffeecf] shadow-[0_6px_0_#e74eaa] transition-all hover:-translate-y-1 hover:shadow-[0_10px_0_#e74eaa]" data-testid="button-hero-reserve">
                 Reserve a place <Ticket size={16} className="transition-transform group-hover:rotate-12" />
@@ -323,8 +349,8 @@ function App() {
           <div className="relative mx-auto w-full max-w-[730px] reveal reveal-delay-2">
             <div className="absolute -inset-4 rounded-[2.2rem] border border-[#fff2de]/60 md:-inset-7" />
              <div className="relative overflow-hidden rounded-[1.8rem] border-[7px] border-[#fff0df] bg-[#c2e6ed] shadow-[0_20px_0_rgba(127,28,102,.18),0_35px_70px_rgba(53,30,69,.22)] transition-transform duration-700 hover:-translate-y-1">
-              <img src={bannerImage} alt="The Haiku Experience under a pink flowering tree" className="block aspect-[1.78] w-full object-cover transition-transform duration-1000 hover:scale-[1.035]" data-testid="img-hero-banner" />
-               <div className="absolute bottom-3 right-3 rounded-full bg-[#fff0df]/90 px-3 py-1.5 font-mono-custom text-[9px] uppercase tracking-[.12em] text-[#42194c] backdrop-blur-sm md:bottom-4 md:right-4 md:tracking-[.18em]">September / doors at dusk</div>
+               <img src={masqueradeImage} alt="The Masquerade of Words at Teller's Lounge for The Haicuu Experience" className="block aspect-[1.78] w-full object-cover transition-transform duration-1000 hover:scale-[1.035]" data-testid="img-hero-banner" />
+                <div className="absolute bottom-3 right-3 rounded-full bg-[#fff0df]/90 px-3 py-1.5 font-mono-custom text-[9px] uppercase tracking-[.12em] text-[#42194c] backdrop-blur-sm md:bottom-4 md:right-4 md:tracking-[.18em]">September 11 / Teller&apos;s Lounge</div>
             </div>
             <div className="float-slow absolute -bottom-9 -left-4 z-20 w-24 rounded-[1.2rem] border-4 border-[#fff0df] bg-[#f362b6] p-2 shadow-[0_8px_0_rgba(127,28,102,.15)] md:-left-10 md:w-32">
               <img src={logoImage} alt="Llama State Productions seal" className="aspect-square w-full rounded-full object-cover" data-testid="img-hero-logo" />
@@ -341,7 +367,7 @@ function App() {
           <div>
             <p className="section-label text-[#b12c78]">01 / the invitation</p>
             <h2 className="mt-6 max-w-[450px] font-display text-5xl leading-[.96] text-[#42194c] md:text-7xl">For the ones who notice the <span className="scribble text-[#df4b9f]">small things.</span></h2>
-            <p className="mt-7 max-w-[380px] text-base leading-7 text-[#684d6e]">Haiku is an intimate evening of live sound, moving image, and people who are still curious. No headliners. No velvet rope. Just a room that changes shape around you.</p>
+             <p className="mt-7 max-w-[380px] text-base leading-7 text-[#684d6e]">The Haicuu Experience is an intimate evening of live sound, moving image, and people who are still curious. This September, the room becomes a masquerade of words.</p>
             <div className="mt-10 flex items-center gap-4">
               <div className="flex -space-x-3">
                 <div className="grid h-10 w-10 place-items-center rounded-full border-2 border-[#f8eddf] bg-[#f362b6] font-display text-lg">M</div>
@@ -363,7 +389,7 @@ function App() {
                <article className="micro-lift rounded-[1.4rem] bg-[#8edfea] p-7 text-[#42194c] shadow-[0_8px_0_#6fc3d0]">
                 <MapPin size={25} className="mb-12" />
                 <p className="section-label">where</p>
-                <h3 className="mt-3 font-display text-4xl">The Llama<br />House</h3>
+                 <h3 className="mt-3 font-display text-4xl">{featuredEvent.venue}</h3>
                 <p className="mt-4 font-mono-custom text-[10px] uppercase leading-5 tracking-[.11em]">address shared<br />with your ticket</p>
               </article>
             </div>
@@ -377,7 +403,7 @@ function App() {
 
       <section className="relative overflow-hidden bg-[#f362b6] px-5 py-16 text-[#42194c] md:px-10 md:py-24">
         <div className="mx-auto grid max-w-[1180px] items-center gap-10 lg:grid-cols-[1fr_auto_1fr]">
-          <p className="font-display text-4xl leading-none md:text-6xl">The next one is<br /><span className="text-[#fff1dc]">nearly here.</span></p>
+           <p className="font-display text-4xl leading-none md:text-6xl">The next one is<br /><span className="text-[#fff1dc]">a masquerade.</span></p>
           <div className="spin-slow relative grid h-36 w-36 place-items-center rounded-full border-2 border-dashed border-[#42194c]/40">
             <div className="absolute inset-3 rounded-full border border-[#42194c]/20" />
             <Sparkles size={25} />
@@ -385,7 +411,7 @@ function App() {
             <span className="absolute bottom-1 font-mono-custom text-[8px] uppercase tracking-[.2em]">make a little room</span>
           </div>
           <div className="lg:justify-self-end">
-            <p className="mb-4 max-w-[320px] text-sm leading-6">Tickets appear in small batches. When the room is full, the door disappears.</p>
+             <p className="mb-4 max-w-[320px] text-sm leading-6">{featuredEvent.name} · September 11 at {featuredEvent.venue}. Dress up, bring a mask, and end the summer with a little amazement.</p>
              <button onClick={() => setPurchaseOpen(true)} className="group pressable inline-flex items-center gap-3 rounded-full bg-[#42194c] px-6 py-3.5 text-xs font-bold uppercase tracking-[.12em] text-[#ffecd5] transition-transform hover:-translate-y-1" data-testid="button-band-reserve">
               Enter the room <ChevronRight size={16} className="transition-transform group-hover:translate-x-1" />
             </button>
