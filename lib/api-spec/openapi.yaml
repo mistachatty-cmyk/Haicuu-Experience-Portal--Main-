@@ -10,6 +10,8 @@ servers:
 tags:
   - name: health
     description: Health operations
+  - name: hosting
+    description: Hosting inquiry operations
 paths:
   /healthz:
     get:
@@ -24,7 +26,71 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+  /hosting-inquiries:
+    post:
+      operationId: submitHostingInquiry
+      tags: [hosting]
+      summary: Submit a hosting inquiry
+      description: Stores a hosting inquiry for the Llama State Productions team to review. This does not create a booking or take payment.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/HostingInquiryInput"
+      responses:
+        "201":
+          description: Inquiry received
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HostingInquiryAccepted"
+        "400":
+          description: Invalid inquiry
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "429":
+          description: Too many inquiries from this client
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    get:
+      operationId: listHostingInquiries
+      tags: [hosting]
+      summary: List received hosting inquiries
+      description: Returns the secured internal queue for the Llama State Productions team.
+      security:
+        - AdminKeyAuth: []
+      responses:
+        "200":
+          description: Received inquiries
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/HostingInquiryRecord"
+        "401":
+          description: Missing or invalid team access key
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "503":
+          description: Team access is not configured
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
 components:
+  securitySchemes:
+    AdminKeyAuth:
+      type: apiKey
+      in: header
+      name: x-admin-key
   schemas:
     HealthStatus:
       type: object
@@ -33,4 +99,57 @@ components:
           type: string
       required:
         - status
+    HostingInquiryInput:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 120
+        email:
+          type: string
+          pattern: "^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$"
+          maxLength: 320
+        room:
+          type: string
+          minLength: 10
+          maxLength: 4000
+      required:
+        - name
+        - email
+        - room
+    HostingInquiryAccepted:
+      type: object
+      properties:
+        received:
+          type: boolean
+      required:
+        - received
+    HostingInquiryRecord:
+      type: object
+      properties:
+        id:
+          type: number
+        name:
+          type: string
+        email:
+          type: string
+        room:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - name
+        - email
+        - room
+        - createdAt
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+      required:
+        - error
 

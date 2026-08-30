@@ -5,9 +5,6 @@
  * API specification
  * OpenAPI spec version: 0.1.0
  */
-export interface HealthStatus {
-  status: string;
-}
 
 export interface HostingInquiryInput {
   /**
@@ -25,20 +22,4 @@ export interface HostingInquiryInput {
      * @maxLength 4000
      */
   room: string;
-}
-
-export interface HostingInquiryAccepted {
-  received: boolean;
-}
-
-export interface HostingInquiryRecord {
-  id: number;
-  name: string;
-  email: string;
-  room: string;
-  createdAt: string;
-}
-
-export interface ErrorResponse {
-  error: string;
 }

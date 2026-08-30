@@ -1,6 +1,7 @@
-import { useEffect, useState } from 'react';
-import { ArrowLeft, ArrowUpRight, Check, Mail, Sparkles } from 'lucide-react';
+import { useEffect, useState, type FormEvent } from 'react';
+import { ArrowLeft, ArrowUpRight, Check, LoaderCircle, Mail, Sparkles } from 'lucide-react';
 import { Link } from 'wouter';
+import { useSubmitHostingInquiry } from '@workspace/api-client-react';
 
 import hostPortrait from '@assets/IMG_9506_1788105157821.jpeg';
 import logoImage from '@assets/IMG_9314_1788103115409.jpeg';
@@ -16,7 +17,31 @@ const metaValues = [
 
 function HostingPage() {
   const [inquirySent, setInquirySent] = useState(false);
+  const [inquiryError, setInquiryError] = useState('');
   const [inquiry, setInquiry] = useState({ name: '', email: '', room: '' });
+  const submitInquiry = useSubmitHostingInquiry({
+    mutation: {
+      onSuccess: () => {
+        setInquiryError('');
+        setInquirySent(true);
+      },
+      onError: () => {
+        setInquiryError('The note could not reach the room. Please try again in a moment.');
+      },
+    },
+  });
+
+  const handleInquirySubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setInquiryError('');
+    submitInquiry.mutate({
+      data: {
+        name: inquiry.name.trim(),
+        email: inquiry.email.trim(),
+        room: inquiry.room.trim(),
+      },
+    });
+  };
 
   useEffect(() => {
     const previousTitle = document.title;
@@ -185,31 +210,32 @@ function HostingPage() {
           </div>
           <div className="micro-lift rounded-[1.6rem] bg-[#42194c] p-7 text-[#ffecd5] shadow-[0_10px_0_#f362b6] md:p-9">
             {!inquirySent ? (
-              <form onSubmit={(event) => { event.preventDefault(); setInquirySent(true); }} className="grid gap-5" data-testid="form-hosting-inquiry">
+              <form onSubmit={handleInquirySubmit} className="grid gap-5" data-testid="form-hosting-inquiry">
                 <label className="grid gap-2 font-mono-custom text-[10px] uppercase tracking-[.12em] text-[#d9bfd2]">
                   Your name
-                  <input required value={inquiry.name} onChange={(event) => setInquiry({ ...inquiry, name: event.target.value })} placeholder="the person opening the door" className="rounded-full border border-[#eac8df]/25 bg-[#302039] px-5 py-3 text-sm text-[#ffecd5] outline-none placeholder:text-[#8f6a87] focus:border-[#86dce9]" data-testid="input-hosting-name" />
+                  <input required minLength={1} maxLength={120} value={inquiry.name} onChange={(event) => setInquiry({ ...inquiry, name: event.target.value })} placeholder="the person opening the door" className="rounded-full border border-[#eac8df]/25 bg-[#302039] px-5 py-3 text-sm text-[#ffecd5] outline-none placeholder:text-[#8f6a87] focus:border-[#86dce9]" data-testid="input-hosting-name" />
                 </label>
                 <label className="grid gap-2 font-mono-custom text-[10px] uppercase tracking-[.12em] text-[#d9bfd2]">
                   Email for the next step
-                  <input required type="email" value={inquiry.email} onChange={(event) => setInquiry({ ...inquiry, email: event.target.value })} placeholder="you@yourroom.com" className="rounded-full border border-[#eac8df]/25 bg-[#302039] px-5 py-3 text-sm text-[#ffecd5] outline-none placeholder:text-[#8f6a87] focus:border-[#86dce9]" data-testid="input-hosting-email" />
+                  <input required type="email" maxLength={320} value={inquiry.email} onChange={(event) => setInquiry({ ...inquiry, email: event.target.value })} placeholder="you@yourroom.com" className="rounded-full border border-[#eac8df]/25 bg-[#302039] px-5 py-3 text-sm text-[#ffecd5] outline-none placeholder:text-[#8f6a87] focus:border-[#86dce9]" data-testid="input-hosting-email" />
                 </label>
                 <label className="grid gap-2 font-mono-custom text-[10px] uppercase tracking-[.12em] text-[#d9bfd2]">
-                  What kind of room?
-                  <textarea required rows={4} value={inquiry.room} onChange={(event) => setInquiry({ ...inquiry, room: event.target.value })} placeholder="a gallery, a backyard, a dinner, something that has not been named yet..." className="resize-none rounded-[1.2rem] border border-[#eac8df]/25 bg-[#302039] px-5 py-4 text-sm text-[#ffecd5] outline-none placeholder:text-[#8f6a87] focus:border-[#86dce9]" data-testid="textarea-hosting-room" />
+                  Room / event details
+                  <textarea required minLength={10} maxLength={4000} rows={4} value={inquiry.room} onChange={(event) => setInquiry({ ...inquiry, room: event.target.value })} placeholder="a gallery, a backyard, a dinner, something that has not been named yet..." className="resize-none rounded-[1.2rem] border border-[#eac8df]/25 bg-[#302039] px-5 py-4 text-sm text-[#ffecd5] outline-none placeholder:text-[#8f6a87] focus:border-[#86dce9]" data-testid="textarea-hosting-room" />
                 </label>
-                <button type="submit" className="mt-2 inline-flex items-center justify-center gap-3 rounded-full bg-[#ffe06a] px-6 py-4 text-xs font-bold uppercase tracking-[.12em] text-[#42194c] transition-transform hover:-translate-y-1" data-testid="button-submit-hosting-inquiry">
-                  Prepare the invitation <ArrowUpRight size={16} />
+                {inquiryError && <p className="rounded-[1rem] border border-[#f362b6]/50 bg-[#5a274f] px-4 py-3 text-sm leading-6 text-[#ffecd5]" role="alert" data-testid="status-hosting-inquiry-error">{inquiryError}</p>}
+                <button type="submit" disabled={submitInquiry.isPending} className="mt-2 inline-flex items-center justify-center gap-3 rounded-full bg-[#ffe06a] px-6 py-4 text-xs font-bold uppercase tracking-[.12em] text-[#42194c] transition-transform hover:-translate-y-1 disabled:cursor-wait disabled:opacity-70" data-testid="button-submit-hosting-inquiry">
+                  {submitInquiry.isPending ? <><LoaderCircle size={16} className="animate-spin" /> Sending the note...</> : <>Send the invitation <ArrowUpRight size={16} /></>}
                 </button>
-                <p className="font-mono-custom text-[9px] uppercase leading-4 tracking-[.1em] text-[#9f7c98]">No payment is taken here / this starts a real conversation.</p>
+                <p className="font-mono-custom text-[9px] uppercase leading-4 tracking-[.1em] text-[#9f7c98]">No payment or booking is taken here / we use these details only to reply about your event.</p>
               </form>
             ) : (
               <div className="py-8 text-center" role="status" data-testid="status-hosting-inquiry">
                 <div className="mx-auto grid h-16 w-16 place-items-center rounded-full bg-[#f362b6] text-[#42194c]"><Check size={30} /></div>
-                <p className="section-label mt-7 text-[#86dce9]">the note is ready</p>
+                <p className="section-label mt-7 text-[#86dce9]">the note arrived</p>
                 <h3 className="mt-3 font-display text-4xl">Beautiful. The room is listening.</h3>
-                <p className="mx-auto mt-4 max-w-[380px] text-sm leading-6 text-[#d9bfd2]">Your hosting details are staged for the next step. No payment was taken—this is where the real conversation begins.</p>
-                <button type="button" onClick={() => setInquirySent(false)} className="mt-7 rounded-full border border-[#eac8df]/30 px-5 py-3 font-mono-custom text-[10px] uppercase tracking-[.12em] text-[#ffecd5] transition-colors hover:border-[#f362b6]" data-testid="button-edit-hosting-inquiry">Edit the note</button>
+                <p className="mx-auto mt-4 max-w-[380px] text-sm leading-6 text-[#d9bfd2]">Your hosting inquiry is queued for Llama State Productions. We’ll reply using the email you shared. No payment was taken and no booking has been made.</p>
+                <button type="button" onClick={() => setInquirySent(false)} className="mt-7 rounded-full border border-[#eac8df]/30 px-5 py-3 font-mono-custom text-[10px] uppercase tracking-[.12em] text-[#ffecd5] transition-colors hover:border-[#f362b6]" data-testid="button-edit-hosting-inquiry">Send another note</button>
               </div>
             )}
           </div>
