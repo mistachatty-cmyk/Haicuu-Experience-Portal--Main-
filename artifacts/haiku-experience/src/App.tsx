@@ -23,6 +23,7 @@ import {
 } from 'lucide-react';
 import { Link, Route, Switch } from 'wouter';
 import ArchivePage from './pages/ArchivePage';
+import HostingPage from './pages/HostingPage';
 import logoImage from '@assets/IMG_9314_1788103115409.jpeg';
 import posterImage from '@assets/IMG_9313_1788103115409.jpeg';
 import masqueradeImage from '@assets/IMG_9478_1788104999100.jpeg';
@@ -58,7 +59,7 @@ const initialTracks: Track[] = [
 ];
 
 const initialGallery: GalleryItem[] = [
-  { id: 1, src: posterImage, alt: 'A pastel poster for The Haiku Experience', caption: 'the invitation / 2024', tone: 'rotate-[-2deg]' },
+  { id: 1, src: posterImage, alt: 'A pastel poster for The Haicuu Experience', caption: 'the invitation / 2024', tone: 'rotate-[-2deg]' },
   { id: 2, src: masqueradeImage, alt: 'The Masquerade of Words event artwork for The Haicuu Experience', caption: 'the next mask / september 11', tone: 'rotate-[1.5deg]' },
   { id: 3, src: logoImage, alt: 'The Llama State Productions circular logo', caption: 'the keeper / est. 1998', tone: 'rotate-[-1deg]' },
 ];
@@ -301,11 +302,12 @@ function HomePage() {
         <div className="mx-auto flex max-w-[1320px] items-center justify-between px-5 py-4 md:px-10">
           <a href="#top" className="group flex items-center gap-3" data-testid="link-home">
             <img src={logoImage} alt="Llama State Productions" className="h-9 w-9 rounded-full object-cover transition-transform duration-500 group-hover:rotate-[-12deg] group-hover:scale-110" />
-            <span className="font-mono-custom text-[10px] uppercase tracking-[.22em] text-[#f6d8ea]">Llama State / <span className="text-[#7cdeed]">Haiku</span></span>
+            <span className="font-mono-custom text-[10px] uppercase tracking-[.22em] text-[#f6d8ea]">Llama State / <span className="text-[#7cdeed]">Haicuu</span></span>
           </a>
           <div className="hidden items-center gap-8 text-[11px] uppercase tracking-[.17em] md:flex">
             <a href="#experience" className="opacity-70 transition-opacity hover:opacity-100" data-testid="link-experience">The experience</a>
             <a href="#listen" className="opacity-70 transition-opacity hover:opacity-100" data-testid="link-listen">Listen</a>
+             <Link href="/hosting" className="opacity-70 transition-opacity hover:opacity-100" data-testid="link-hosting">Host Cujo Sama</Link>
              <Link href="/archive" className="opacity-70 transition-opacity hover:opacity-100" data-testid="link-archive">Archive</Link>
           </div>
            <button onClick={() => setPurchaseOpen(true)} className="group pressable flex items-center gap-2 rounded-full bg-[#f465b9] px-4 py-2 text-[10px] font-bold uppercase tracking-[.16em] text-[#302039] transition-transform hover:-translate-y-0.5" data-testid="button-nav-reserve">
@@ -327,7 +329,7 @@ function HomePage() {
                <span className="pulse-dot h-2 w-2 rounded-full bg-[#ee4da7]" /> Next gathering / September 11, 2026
             </div>
              <h1 className="hero-title reveal reveal-delay-1 mt-7 font-display text-[clamp(4.6rem,12vw,10.5rem)] font-semibold text-[#42194c] lg:text-[clamp(5.2rem,8.6vw,9.4rem)]">
-              Haiku<br /><span className="ml-[.18em] text-[#e94fa9]">Experience</span>
+               Haicuu<br /><span className="ml-[.18em] text-[#e94fa9]">Experience</span>
             </h1>
              <p className="reveal reveal-delay-2 mt-9 max-w-[430px] font-display text-[1.35rem] leading-[1.15] text-[#613b68] md:text-[1.55rem]">
                The Haicuu Experience returns with a night of masks, words, and beautiful surprises at Teller&apos;s Lounge.
@@ -346,6 +348,9 @@ function HomePage() {
               <a href="#experience" className="group inline-flex items-center gap-2 px-2 py-3 text-xs font-bold uppercase tracking-[.12em] text-[#42194c]" data-testid="link-discover">
                 Find out more <ArrowDown size={15} className="transition-transform group-hover:translate-y-1" />
               </a>
+               <Link href="/hosting" className="group inline-flex items-center gap-2 px-2 py-3 text-xs font-bold uppercase tracking-[.12em] text-[#42194c]" data-testid="link-hosting-hero">
+                 Host this energy <ArrowUpRight size={15} className="transition-transform group-hover:rotate-45" />
+               </Link>
             </div>
           </div>
            <div className="relative z-10 order-1 mx-auto w-full max-w-[900px] reveal reveal-delay-2 lg:order-2">
@@ -518,6 +523,7 @@ function HomePage() {
               <a href="#top" className="transition-colors hover:text-[#ffe06a]" data-testid="link-footer-top">Back to top</a>
               <a href="#listen" className="transition-colors hover:text-[#ffe06a]" data-testid="link-footer-listen">Listen again</a>
               <a href="#experience" className="transition-colors hover:text-[#ffe06a]" data-testid="link-footer-experience">The details</a>
+               <Link href="/hosting" className="transition-colors hover:text-[#ffe06a]" data-testid="link-footer-hosting">Host Cujo Sama</Link>
               <button onClick={() => setUnlockOpen(true)} className="text-left transition-colors hover:text-[#ffe06a]" data-testid="button-open-creator">For the maker</button>
             </div>
           </div>
@@ -663,6 +669,7 @@ function HomePage() {
 function App() {
   return (
     <Switch>
+      <Route path="/hosting" component={HostingPage} />
       <Route path="/archive" component={ArchivePage} />
       <Route path="/" component={HomePage} />
       <Route component={() => (

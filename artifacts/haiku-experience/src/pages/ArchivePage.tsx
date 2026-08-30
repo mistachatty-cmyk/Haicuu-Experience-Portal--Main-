@@ -205,11 +205,12 @@ function ArchivePage() {
         <div className="mx-auto flex max-w-[1320px] items-center justify-between px-5 py-4 md:px-10">
           <Link href="/" className="group flex items-center gap-3" data-testid="link-archive-home">
             <span className="grid h-9 w-9 place-items-center rounded-full border border-[#f362b6] font-display text-xl text-[#f362b6] transition-transform duration-500 group-hover:rotate-[-12deg]">H</span>
-            <span className="font-mono-custom text-[10px] uppercase tracking-[.22em] text-[#f6d8ea]">Llama State / <span className="text-[#7cdeed]">Haiku</span></span>
+            <span className="font-mono-custom text-[10px] uppercase tracking-[.22em] text-[#f6d8ea]">Llama State / <span className="text-[#7cdeed]">Haicuu</span></span>
           </Link>
           <div className="hidden items-center gap-8 text-[11px] uppercase tracking-[.17em] md:flex">
             <Link href="/" className="opacity-70 transition-opacity hover:opacity-100" data-testid="link-archive-experience">The experience</Link>
             <a href="/#listen" className="opacity-70 transition-opacity hover:opacity-100" data-testid="link-archive-listen">Listen</a>
+            <Link href="/hosting" className="opacity-70 transition-opacity hover:opacity-100" data-testid="link-archive-hosting">Host Cujo Sama</Link>
             <Link href="/archive" className="text-[#ffe06a]" data-testid="link-archive-current">Archive</Link>
           </div>
           <Link href="/#top" className="group flex items-center gap-2 rounded-full bg-[#f465b9] px-4 py-2 text-[10px] font-bold uppercase tracking-[.16em] text-[#302039]" data-testid="link-archive-reserve">
