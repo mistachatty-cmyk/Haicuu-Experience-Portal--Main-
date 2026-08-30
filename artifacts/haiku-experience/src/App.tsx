@@ -21,6 +21,8 @@ import {
   Volume2,
   X,
 } from 'lucide-react';
+import { Link, Route, Switch } from 'wouter';
+import ArchivePage from './pages/ArchivePage';
 import logoImage from '@assets/IMG_9314_1788103115409.jpeg';
 import posterImage from '@assets/IMG_9313_1788103115409.jpeg';
 import masqueradeImage from '@assets/IMG_9478_1788104999100.jpeg';
@@ -141,7 +143,7 @@ function isValidContact(value: string) {
   return email || phone;
 }
 
-function App() {
+function HomePage() {
   const [purchaseOpen, setPurchaseOpen] = useState(false);
   const [tickets, setTickets] = useState(1);
   const [reserved, setReserved] = useState(false);
@@ -304,7 +306,7 @@ function App() {
           <div className="hidden items-center gap-8 text-[11px] uppercase tracking-[.17em] md:flex">
             <a href="#experience" className="opacity-70 transition-opacity hover:opacity-100" data-testid="link-experience">The experience</a>
             <a href="#listen" className="opacity-70 transition-opacity hover:opacity-100" data-testid="link-listen">Listen</a>
-            <a href="#archive" className="opacity-70 transition-opacity hover:opacity-100" data-testid="link-archive">Archive</a>
+             <Link href="/archive" className="opacity-70 transition-opacity hover:opacity-100" data-testid="link-archive">Archive</Link>
           </div>
            <button onClick={() => setPurchaseOpen(true)} className="group pressable flex items-center gap-2 rounded-full bg-[#f465b9] px-4 py-2 text-[10px] font-bold uppercase tracking-[.16em] text-[#302039] transition-transform hover:-translate-y-0.5" data-testid="button-nav-reserve">
             Reserve <ArrowUpRight size={13} className="transition-transform group-hover:rotate-45" />
@@ -462,7 +464,10 @@ function App() {
               <p className="section-label text-[#b12c78]">03 / visual archive</p>
               <h2 className="mt-5 font-display text-5xl leading-[.94] text-[#42194c] md:text-8xl">Proof that<br /><span className="text-[#df4b9f]">it happened.</span></h2>
             </div>
-            <p className="max-w-[260px] font-display text-xl leading-tight text-[#684d6e]">Postcards from a world with the edges left on.</p>
+             <div className="max-w-[280px]">
+               <p className="font-display text-xl leading-tight text-[#684d6e]">Postcards from a world with the edges left on.</p>
+               <Link href="/archive" className="mt-5 inline-flex items-center gap-2 font-mono-custom text-[10px] uppercase tracking-[.13em] text-[#b12c78] transition-colors hover:text-[#42194c]" data-testid="link-open-archive">Open the full archive <ArrowUpRight size={14} /></Link>
+             </div>
           </div>
           <div className="mt-16 grid gap-8 md:grid-cols-[1.1fr_.9fr_.82fr] md:items-start">
             {creatorGallery.map((item, index) => (
@@ -652,6 +657,24 @@ function App() {
 
       {toast && <div className="toast-in fixed bottom-5 left-1/2 z-[60] -translate-x-1/2 rounded-full bg-[#42194c] px-5 py-3 font-mono-custom text-[10px] uppercase tracking-[.1em] text-[#ffe06a] shadow-xl" role="status" data-testid="status-toast">{toast}</div>}
     </main>
+  );
+}
+
+function App() {
+  return (
+    <Switch>
+      <Route path="/archive" component={ArchivePage} />
+      <Route path="/" component={HomePage} />
+      <Route component={() => (
+        <main className="grid min-h-[100dvh] place-items-center bg-[#f8eddf] px-6 text-[#42194c]">
+          <div className="text-center">
+            <p className="section-label text-[#b12c78]">404 / wrong room</p>
+            <h1 className="mt-4 font-display text-6xl">Nothing here yet.</h1>
+            <Link href="/" className="mt-7 inline-flex rounded-full bg-[#42194c] px-5 py-3 font-mono-custom text-[10px] uppercase tracking-[.12em] text-[#ffecd5]" data-testid="link-not-found-home">Back to the experience</Link>
+          </div>
+        </main>
+      )} />
+    </Switch>
   );
 }
 
