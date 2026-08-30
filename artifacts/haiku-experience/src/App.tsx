@@ -52,6 +52,7 @@ const EVENTS_STORAGE_KEY = 'haiku-experience-events';
 const OFFERS_STORAGE_KEY = 'haiku-experience-offers';
 const TRACKS_STORAGE_KEY = 'haiku-experience-tracks';
 const GALLERY_STORAGE_KEY = 'haiku-experience-gallery';
+const MASQUERADE_ADDRESS = '117 Division Ave S, Grand Rapids, MI 49503';
 
 const initialTracks: Track[] = [
   { id: 1, title: 'Clouds in the Kitchen', artist: 'Llama State Radio 01', note: 'for making tea at midnight', link: '#' },
@@ -340,7 +341,8 @@ function HomePage() {
                  <p className="font-display text-2xl text-[#42194c]">The Masquerade of Words</p>
                  <span className="font-mono-custom text-[9px] uppercase tracking-[.14em] text-[#7f1c67]">dress / suit / mask</span>
                </div>
-             <p className="mt-2 font-mono-custom text-[10px] uppercase tracking-[.14em] text-[#795b7a]">September 11 · Teller&apos;s Lounge · 117 Division Ave S · time to be announced</p>
+             <p className="mt-2 font-mono-custom text-[10px] uppercase tracking-[.14em] text-[#795b7a]">September 11 · Teller&apos;s Lounge · time to be announced</p>
+             <p className="mt-1 font-mono-custom text-[10px] uppercase tracking-[.14em] text-[#795b7a]">{MASQUERADE_ADDRESS}</p>
              </div>
             <div className="reveal reveal-delay-3 mt-9 flex flex-wrap items-center gap-4">
                <button onClick={() => setPurchaseOpen(true)} className="group pressable inline-flex items-center gap-3 rounded-full bg-[#42194c] px-6 py-3.5 text-xs font-bold uppercase tracking-[.12em] text-[#ffeecf] shadow-[0_6px_0_#e74eaa] transition-all hover:-translate-y-1 hover:shadow-[0_10px_0_#e74eaa]" data-testid="button-hero-reserve">
@@ -401,7 +403,7 @@ function HomePage() {
                 <MapPin size={25} className="mb-12" />
                 <p className="section-label">where</p>
                  <h3 className="mt-3 font-display text-4xl">{featuredEvent.venue}</h3>
-                <p className="mt-4 font-mono-custom text-[10px] uppercase leading-5 tracking-[.11em]">address shared<br />with your ticket</p>
+                <p className="mt-4 font-mono-custom text-[10px] uppercase leading-5 tracking-[.11em]">{featuredEvent.date === '2026-09-11' ? MASQUERADE_ADDRESS : <>address shared<br />with your ticket</>}</p>
               </article>
             </div>
             <div className="mt-5 flex items-center justify-between rounded-[1.4rem] border border-[#d9bfd2] bg-[#fdf4e8] px-6 py-5">

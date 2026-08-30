@@ -11,6 +11,26 @@ function FlyerPage() {
   const { id } = useParams<{ id: string }>();
   const flyer = flyerItems.find((item) => item.id === id);
   const isMasquerade = flyer?.id === MASQUERADE_ID;
+  const pageTitle = flyer
+    ? isMasquerade ? 'The Masquerade of Words Flyer | The Haicuu Experience' : `${flyer.caption} | The Haicuu Experience`
+    : 'Flyer Not Found | The Haicuu Experience';
+  const pageDescription = flyer
+    ? isMasquerade
+      ? 'The official flyer for The Masquerade of Words at Teller’s Lounge on September 11, 2026.'
+      : `View this flyer from the Haicuu Experience archive. ${flyer.caption}`
+    : 'This Haicuu Experience flyer could not be found.';
+
+  useEffect(() => {
+    const previousTitle = document.title;
+    const descriptionMeta = document.querySelector<HTMLMetaElement>('meta[name="description"]');
+    const previousDescription = descriptionMeta?.getAttribute('content') ?? '';
+    document.title = pageTitle;
+    descriptionMeta?.setAttribute('content', pageDescription);
+    return () => {
+      document.title = previousTitle;
+      descriptionMeta?.setAttribute('content', previousDescription);
+    };
+  }, [pageDescription, pageTitle]);
 
   if (!flyer) {
     return (
@@ -25,23 +45,6 @@ function FlyerPage() {
       </main>
     );
   }
-
-  const pageTitle = isMasquerade ? 'The Masquerade of Words Flyer | The Haicuu Experience' : `${flyer.caption} | The Haicuu Experience`;
-  const pageDescription = isMasquerade
-    ? 'The official flyer for The Masquerade of Words at Teller’s Lounge on September 11, 2026.'
-    : `View this flyer from the Haicuu Experience archive. ${flyer.caption}`;
-
-  useEffect(() => {
-    const previousTitle = document.title;
-    const descriptionMeta = document.querySelector<HTMLMetaElement>('meta[name="description"]');
-    const previousDescription = descriptionMeta?.getAttribute('content') ?? '';
-    document.title = pageTitle;
-    descriptionMeta?.setAttribute('content', pageDescription);
-    return () => {
-      document.title = previousTitle;
-      descriptionMeta?.setAttribute('content', previousDescription);
-    };
-  }, [pageDescription, pageTitle]);
 
   return (
     <main className="flyer-page grain min-h-[100dvh] bg-[#302039] text-[#ffecd5]">
