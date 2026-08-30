@@ -63,21 +63,21 @@ const flyerItems: ArchiveItem[] = [
   { id: '9473', src: archive9473, kind: 'flyers', shape: 'portrait', alt: '13Moons Magazine cover featuring a portrait, cover lines, and a large title at the top', caption: 'A 13Moons Magazine cover, layered with cover lines and a portrait.' },
   { id: '9474', src: archive9474, kind: 'flyers', shape: 'square', alt: 'Colorful illustrated event flyer with a framed portrait and bold handwritten lettering', caption: 'A bright illustrated invitation with a framed portrait and hand-drawn lettering.' },
   { id: '9477', src: archive9477, kind: 'flyers', shape: 'landscape', alt: 'Promotional graphic with a red-haired performer, a group portrait, and event lettering', caption: 'A promotional graphic that places a performer beside a small group portrait.' },
-  { id: '9478', src: archive9478, kind: 'flyers', shape: 'landscape', alt: 'Dark Hai Cuu promotional flyer reading The Masquerade of Words', caption: 'A dark Hai Cuu flyer for The Masquerade of Words.' },
-  { id: '9479', src: archive9479, kind: 'flyers', shape: 'portrait', alt: 'Tall social media post showing a dark Hai Cuu event graphic and small white text', caption: 'A tall social post preserving a dark event graphic and its small type.' },
+  { id: '9478', src: archive9478, kind: 'flyers', shape: 'landscape', alt: 'Dark Haicuu promotional flyer reading The Masquerade of Words', caption: 'A dark Haicuu flyer for The Masquerade of Words.' },
+  { id: '9479', src: archive9479, kind: 'flyers', shape: 'portrait', alt: 'Tall social media post showing a dark Haicuu event graphic and small white text', caption: 'A tall social post preserving a dark event graphic and its small type.' },
   { id: '9486', src: archive9486, kind: 'flyers', shape: 'portrait', alt: 'Pink and white poster with Japanese characters, a performer in a bright cap, and graphic shapes', caption: 'A pink poster pairing Japanese lettering with a portrait in a bright cap.' },
-  { id: '9489', src: archive9489, kind: 'flyers', shape: 'portrait', alt: 'Colorful Hai Cuu flyer with a smiling character, a small show badge, and event information', caption: 'A colorful Hai Cuu show flyer with a smiling illustrated figure.' },
-  { id: '9490', src: archive9490, kind: 'flyers', shape: 'portrait', alt: 'Hai Cuu flyer with a snowman-like figure, colorful lettering, and a poetry show notice', caption: 'A playful Hai Cuu poetry flyer with a snowman-like central figure.' },
+  { id: '9489', src: archive9489, kind: 'flyers', shape: 'portrait', alt: 'Colorful Haicuu flyer with a smiling character, a small show badge, and event information', caption: 'A colorful Haicuu show flyer with a smiling illustrated figure.' },
+  { id: '9490', src: archive9490, kind: 'flyers', shape: 'portrait', alt: 'Haicuu flyer with a snowman-like figure, colorful lettering, and a poetry show notice', caption: 'A playful Haicuu poetry flyer with a snowman-like central figure.' },
   { id: '9492', src: archive9492, kind: 'flyers', shape: 'landscape', alt: 'Black and white RAP RAVE poster with a venue drawing and show details', caption: 'A black-and-white RAP RAVE poster with a hand-drawn venue scene.' },
-  { id: '9496', src: archive9496, kind: 'flyers', shape: 'portrait', alt: 'Pink Hai Cuu poster with colorful lettering, illustrated figures, and the words special event', caption: 'A pink Hai Cuu special-event poster filled with illustrated figures.' },
+  { id: '9496', src: archive9496, kind: 'flyers', shape: 'portrait', alt: 'Pink Haicuu poster with colorful lettering, illustrated figures, and the words special event', caption: 'A pink Haicuu special-event poster filled with illustrated figures.' },
   { id: '9497', src: archive9497, kind: 'flyers', shape: 'portrait', alt: 'ArtPrize poster featuring Cuju Josama, a colorful geometric border, and a circular portrait', caption: 'An ArtPrize poster featuring Cuju Josama inside a colorful border.' },
   { id: '9498', src: archive9498, kind: 'flyers', shape: 'portrait', alt: 'Pink price list poster with hand-lettered categories and dollar amounts', caption: 'A pink hand-lettered price list with categories and dollar amounts.' },
-  { id: '9500', src: archive9500, kind: 'flyers', shape: 'portrait', alt: 'Pink Hai Cuu Experience flyer with wine glasses, a llama illustration, and a ladies night event notice', caption: 'A pink Hai Cuu Experience flyer framed by wine glasses and a llama illustration.' },
+  { id: '9500', src: archive9500, kind: 'flyers', shape: 'portrait', alt: 'Pink Haicuu Experience flyer with wine glasses, a llama illustration, and a ladies night event notice', caption: 'A pink Haicuu Experience flyer framed by wine glasses and a llama illustration.' },
   { id: '9502', src: archive9502, kind: 'flyers', shape: 'square', alt: 'Black and red event graphic featuring Cuju Josama and a guest judge', caption: 'A black-and-red event graphic pairing Cuju Josama with a guest judge.' },
-  { id: '9511', src: archive9511, kind: 'flyers', shape: 'portrait', alt: 'Pink Hai Cuu flyer with illustrated figures, bright lettering, and a special-event title', caption: 'A pink Hai Cuu flyer built from bright lettering and illustrated figures.' },
-  { id: '9512', src: archive9512, kind: 'flyers', shape: 'portrait', alt: 'Black and white poster reading The Hai Cuu Experience and Museum with a portrait illustration', caption: 'A black-and-white Hai Cuu Experience museum poster.' },
-  { id: '9513', src: archive9513, kind: 'flyers', shape: 'portrait', alt: 'Pink breast cancer awareness event flyer for the Hai Cuu Experience with a ribbon graphic', caption: 'A pink Hai Cuu Experience event flyer with a large ribbon graphic.' },
-  { id: '9514', src: archive9514, kind: 'flyers', shape: 'portrait', alt: 'Colorful Hai Cuu live poetry poster with illustrated rabbits and a small price line', caption: 'A colorful Hai Cuu live-poetry poster with illustrated rabbits.' },
+  { id: '9511', src: archive9511, kind: 'flyers', shape: 'portrait', alt: 'Pink Haicuu flyer with illustrated figures, bright lettering, and a special-event title', caption: 'A pink Haicuu flyer built from bright lettering and illustrated figures.' },
+  { id: '9512', src: archive9512, kind: 'flyers', shape: 'portrait', alt: 'Black and white poster reading The Haicuu Experience and Museum with a portrait illustration', caption: 'A black-and-white Haicuu Experience museum poster.' },
+  { id: '9513', src: archive9513, kind: 'flyers', shape: 'portrait', alt: 'Pink breast cancer awareness event flyer for the Haicuu Experience with a ribbon graphic', caption: 'A pink Haicuu Experience event flyer with a large ribbon graphic.' },
+  { id: '9514', src: archive9514, kind: 'flyers', shape: 'portrait', alt: 'Colorful Haicuu live poetry poster with illustrated rabbits and a small price line', caption: 'A colorful Haicuu live-poetry poster with illustrated rabbits.' },
   { id: '9515', src: archive9515, kind: 'flyers', shape: 'portrait', alt: 'Yellow and pink Hai Cuu live poetry poster with illustrated rabbits and event lettering', caption: 'A yellow-and-pink Hai Cuu live-poetry poster with illustrated rabbits.' },
 ];
 
@@ -111,7 +111,11 @@ const photographItems: ArchiveItem[] = [
   { id: '9510', src: archive9510, kind: 'photographs', shape: 'landscape', alt: 'Figure in layered clothing standing in a vivid green room or light installation', caption: 'A layered figure stands inside vivid green light.' },
 ];
 
-const archiveItems = [...flyerItems, ...photographItems];
+const archiveItems = [...flyerItems, ...photographItems].map((item) => ({
+  ...item,
+  alt: item.alt.replace(/Hai Cuu/g, 'Haicuu'),
+  caption: item.caption.replace(/Hai Cuu/g, 'Haicuu'),
+}));
 
 function ArchiveCard({ item, index, onOpen }: { item: ArchiveItem; index: number; onOpen: (item: ArchiveItem) => void }) {
   const isFeature = item.kind === 'flyers' && index === 0;

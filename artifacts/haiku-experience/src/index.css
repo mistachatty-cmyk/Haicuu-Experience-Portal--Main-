@@ -177,6 +177,23 @@
     radial-gradient(circle at 90% 12%, rgba(122, 221, 239, .35), transparent 24rem),
     linear-gradient(140deg, #f9d6ea 0%, #f5c4e7 44%, #b3ddeb 100%);
 }
+.hosting-page { position: relative; isolation: isolate; }
+.hosting-hero {
+  background:
+    radial-gradient(circle at 87% 19%, rgba(255, 101, 193, .28), transparent 25rem),
+    radial-gradient(circle at 9% 82%, rgba(134, 220, 233, .3), transparent 25rem),
+    linear-gradient(140deg, #f9d6ea 0%, #f5c4e7 46%, #b3ddeb 100%);
+}
+.hosting-hero__ring { position: absolute; border: 1px solid rgba(127, 28, 103, .2); border-radius: 999px; pointer-events: none; }
+.hosting-hero__ring--one { right: -12rem; top: 9rem; width: 42rem; height: 42rem; }
+.hosting-hero__ring--two { right: 7rem; top: 23rem; width: 17rem; height: 17rem; border-color: rgba(255, 236, 213, .7); }
+.hosting-title { letter-spacing: -.075em; }
+.hosting-hero__portrait { isolation: isolate; }
+.hosting-intro { background: #f8eddf; }
+.hosting-package { min-height: 100%; transition: transform .45s cubic-bezier(.22, .8, .26, 1), box-shadow .45s ease; }
+.hosting-package:hover { transform: translateY(-6px); }
+.hosting-scene { background: #86dce9; }
+.hosting-inquire { background: #f8eddf; }
 .scribble { text-decoration: underline; text-decoration-style: wavy; text-decoration-thickness: 2px; text-underline-offset: 7px; }
 .hero-title { letter-spacing: -.065em; line-height: .84; }
 .soft-shadow { box-shadow: 0 13px 0 rgba(127, 28, 102, .16), 0 28px 52px rgba(83, 40, 93, .2); }
@@ -255,6 +272,11 @@
 .archive-lightbox__arrow--left { left: 1.25rem; }
 .archive-lightbox__arrow--right { right: 1.25rem; }
 @media (max-width: 767px) {
+  .hosting-title { letter-spacing: -.065em; }
+  .hosting-hero__ring--one { right: -22rem; top: 12rem; }
+  .hosting-hero__ring--two { right: -3rem; top: 30rem; }
+  .hosting-hero__portrait { margin-top: 1rem; }
+  .hosting-package:hover { transform: none; }
   .archive-section-heading { display: block; }
   .archive-section-heading > p { margin-top: 1.5rem; }
   .archive-paper-grid, .archive-photo-wall { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }

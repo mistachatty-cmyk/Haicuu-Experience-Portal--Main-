@@ -81,7 +81,7 @@ function HostingPage() {
                 <p className="mt-2 font-display text-3xl leading-none text-[#42194c]">Cujo Sama</p>
               </div>
             </div>
-            <div className="float-slow absolute -bottom-8 -left-5 z-10 grid h-28 w-28 place-items-center rounded-full border-4 border-[#fff0df] bg-[#ffe06a] p-4 text-center shadow-[0_8px_0_rgba(127,28,102,.15)] md:-left-10 md:h-36 md:w-36">
+            <div className="float-slow absolute -right-2 -top-7 z-10 grid h-28 w-28 place-items-center rounded-full border-4 border-[#fff0df] bg-[#ffe06a] p-4 text-center shadow-[0_8px_0_rgba(127,28,102,.15)] md:-right-8 md:h-36 md:w-36">
               <Sparkles size={20} className="mb-1" />
               <span className="font-mono-custom text-[9px] uppercase leading-4 tracking-[.1em]">make room<br />for wonder</span>
             </div>
