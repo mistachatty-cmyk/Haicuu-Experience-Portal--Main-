@@ -59,7 +59,7 @@ type ArchiveItem = {
   shape: 'portrait' | 'landscape' | 'square';
 };
 
-const flyerItems: ArchiveItem[] = [
+export const flyerItems: ArchiveItem[] = [
   { id: '9473', src: archive9473, kind: 'flyers', shape: 'portrait', alt: '13Moons Magazine cover featuring a portrait, cover lines, and a large title at the top', caption: 'A 13Moons Magazine cover, layered with cover lines and a portrait.' },
   { id: '9474', src: archive9474, kind: 'flyers', shape: 'square', alt: 'Colorful illustrated event flyer with a framed portrait and bold handwritten lettering', caption: 'A bright illustrated invitation with a framed portrait and hand-drawn lettering.' },
   { id: '9477', src: archive9477, kind: 'flyers', shape: 'landscape', alt: 'Promotional graphic with a red-haired performer, a group portrait, and event lettering', caption: 'A promotional graphic that places a performer beside a small group portrait.' },
@@ -120,22 +120,33 @@ const archiveItems = [...flyerItems, ...photographItems].map((item) => ({
 function ArchiveCard({ item, index, onOpen }: { item: ArchiveItem; index: number; onOpen: (item: ArchiveItem) => void }) {
   const isFeature = item.kind === 'flyers' && index === 0;
   return (
-    <button
-      type="button"
-      onClick={() => onOpen(item)}
-      className={`archive-card archive-card--${item.kind} archive-card--${item.shape} ${isFeature ? 'archive-card--feature' : ''}`}
-      data-testid={`button-archive-image-${item.id}`}
-      aria-label={`Open larger view: ${item.caption}`}
-    >
-      <span className="archive-card__image">
-        <img src={item.src} alt={item.alt} loading={index > 5 ? 'lazy' : 'eager'} data-testid={`img-archive-${item.id}`} />
-        <span className="archive-card__open">open view <ArrowUpRight size={14} /></span>
-      </span>
-      <span className="archive-card__caption">
-        <span className="archive-card__number">IMG_{item.id}</span>
-        <span>{item.caption}</span>
-      </span>
-    </button>
+    <div className={`archive-card archive-card--${item.kind} archive-card--${item.shape} ${isFeature ? 'archive-card--feature' : ''}`}>
+      <button
+        type="button"
+        onClick={() => onOpen(item)}
+        className="block w-full text-left"
+        data-testid={`button-archive-image-${item.id}`}
+        aria-label={`Open larger view: ${item.caption}`}
+      >
+        <span className="archive-card__image">
+          <img src={item.src} alt={item.alt} loading={index > 5 ? 'lazy' : 'eager'} data-testid={`img-archive-${item.id}`} />
+          <span className="archive-card__open">open view <ArrowUpRight size={14} /></span>
+        </span>
+        <span className="archive-card__caption">
+          <span className="archive-card__number">IMG_{item.id}</span>
+          <span>{item.caption}</span>
+        </span>
+      </button>
+      {item.kind === 'flyers' && (
+        <Link
+          href={`/archive/flyer/${item.id}`}
+          className="archive-card__detail-link"
+          data-testid={`link-flyer-${item.id}`}
+        >
+          open flyer page <ArrowUpRight size={13} />
+        </Link>
+      )}
+    </div>
   );
 }
 
@@ -290,7 +301,7 @@ function ArchivePage() {
               </div>
               <p className="max-w-[270px] font-display text-xl leading-tight text-[#684d6e]">Posters, invitations, and artifacts with their edges still showing.</p>
             </div>
-            <div className="archive-paper-grid mt-16">
+             <div className="archive-paper-grid mt-16">
               {visibleFlyers.map((item, index) => <ArchiveCard key={item.id} item={item} index={index} onOpen={openLightbox} />)}
             </div>
           </div>

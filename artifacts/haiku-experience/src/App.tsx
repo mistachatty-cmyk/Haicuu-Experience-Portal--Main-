@@ -23,6 +23,7 @@ import {
 } from 'lucide-react';
 import { Link, Route, Switch } from 'wouter';
 import ArchivePage from './pages/ArchivePage';
+import FlyerPage from './pages/FlyerPage';
 import HostingPage from './pages/HostingPage';
 import logoImage from '@assets/IMG_9314_1788103115409.jpeg';
 import posterImage from '@assets/IMG_9313_1788103115409.jpeg';
@@ -339,7 +340,7 @@ function HomePage() {
                  <p className="font-display text-2xl text-[#42194c]">The Masquerade of Words</p>
                  <span className="font-mono-custom text-[9px] uppercase tracking-[.14em] text-[#7f1c67]">dress / suit / mask</span>
                </div>
-               <p className="mt-2 font-mono-custom text-[10px] uppercase tracking-[.14em] text-[#795b7a]">September 11 · Teller&apos;s Lounge · time to be announced</p>
+             <p className="mt-2 font-mono-custom text-[10px] uppercase tracking-[.14em] text-[#795b7a]">September 11 · Teller&apos;s Lounge · 117 Division Ave S · time to be announced</p>
              </div>
             <div className="reveal reveal-delay-3 mt-9 flex flex-wrap items-center gap-4">
                <button onClick={() => setPurchaseOpen(true)} className="group pressable inline-flex items-center gap-3 rounded-full bg-[#42194c] px-6 py-3.5 text-xs font-bold uppercase tracking-[.12em] text-[#ffeecf] shadow-[0_6px_0_#e74eaa] transition-all hover:-translate-y-1 hover:shadow-[0_10px_0_#e74eaa]" data-testid="button-hero-reserve">
@@ -358,7 +359,10 @@ function HomePage() {
              <div className="relative overflow-hidden rounded-[1.8rem] border-[7px] border-[#fff0df] bg-[#c2e6ed] shadow-[0_20px_0_rgba(127,28,102,.18),0_35px_70px_rgba(53,30,69,.22)] transition-transform duration-700 hover:-translate-y-1">
                <img src={masqueradeImage} alt="The Masquerade of Words at Teller's Lounge for The Haicuu Experience" className="block aspect-[1.78] w-full object-cover transition-transform duration-1000 hover:scale-[1.035]" data-testid="img-hero-banner" />
                 <div className="absolute bottom-3 right-3 rounded-full bg-[#fff0df]/90 px-3 py-1.5 font-mono-custom text-[9px] uppercase tracking-[.12em] text-[#42194c] backdrop-blur-sm md:bottom-4 md:right-4 md:tracking-[.18em]">September 11 / Teller&apos;s Lounge</div>
-            </div>
+             </div>
+             <Link href="/archive/flyer/9478" className="mt-5 inline-flex items-center gap-2 font-mono-custom text-[10px] uppercase tracking-[.13em] text-[#b12c78] transition-colors hover:text-[#42194c]" data-testid="link-hero-masquerade-flyer">
+               Open the Masquerade flyer <ArrowUpRight size={14} />
+             </Link>
             <div className="float-slow absolute -bottom-9 -left-4 z-20 w-24 rounded-[1.2rem] border-4 border-[#fff0df] bg-[#f362b6] p-2 shadow-[0_8px_0_rgba(127,28,102,.15)] md:-left-10 md:w-32">
               <img src={logoImage} alt="Llama State Productions seal" className="aspect-square w-full rounded-full object-cover" data-testid="img-hero-logo" />
             </div>
@@ -476,13 +480,16 @@ function HomePage() {
           </div>
           <div className="mt-16 grid gap-8 md:grid-cols-[1.1fr_.9fr_.82fr] md:items-start">
             {creatorGallery.map((item, index) => (
-               <button key={item.id} onClick={() => setLightbox(item)} className={`group micro-lift text-left ${index === 0 ? 'md:mt-10' : ''} ${item.tone}`} data-testid={`button-gallery-${item.id}`}>
-                <div className="relative overflow-hidden rounded-[1.3rem] border-[6px] border-[#fff3e5] bg-[#fff3e5] shadow-[0_10px_0_rgba(127,28,102,.13)]">
-                  <img src={item.src} alt={item.alt} className="aspect-square w-full object-cover transition duration-700 group-hover:scale-105" data-testid={`img-gallery-${item.id}`} />
-                  <div className="absolute inset-0 grid place-items-center bg-[#42194c]/0 transition-colors group-hover:bg-[#42194c]/35"><span className="scale-75 rounded-full bg-[#ffe06a] px-4 py-2 font-mono-custom text-[9px] uppercase tracking-[.12em] opacity-0 transition-all group-hover:scale-100 group-hover:opacity-100">open image</span></div>
-                </div>
-                <p className="mt-4 font-mono-custom text-[10px] uppercase tracking-[.15em] text-[#795b7a]">{item.caption}</p>
-              </button>
+               <div key={item.id} className={`group micro-lift text-left ${index === 0 ? 'md:mt-10' : ''} ${item.tone}`}>
+                 <button onClick={() => setLightbox(item)} className="block w-full text-left" data-testid={`button-gallery-${item.id}`}>
+                  <div className="relative overflow-hidden rounded-[1.3rem] border-[6px] border-[#fff3e5] bg-[#fff3e5] shadow-[0_10px_0_rgba(127,28,102,.13)]">
+                    <img src={item.src} alt={item.alt} className="aspect-square w-full object-cover transition duration-700 group-hover:scale-105" data-testid={`img-gallery-${item.id}`} />
+                    <div className="absolute inset-0 grid place-items-center bg-[#42194c]/0 transition-colors group-hover:bg-[#42194c]/35"><span className="scale-75 rounded-full bg-[#ffe06a] px-4 py-2 font-mono-custom text-[9px] uppercase tracking-[.12em] opacity-0 transition-all group-hover:scale-100 group-hover:opacity-100">open image</span></div>
+                  </div>
+                  <p className="mt-4 font-mono-custom text-[10px] uppercase tracking-[.15em] text-[#795b7a]">{item.caption}</p>
+                 </button>
+                 {index === 1 && <Link href="/archive/flyer/9478" className="mt-3 inline-flex items-center gap-2 font-mono-custom text-[9px] uppercase tracking-[.12em] text-[#b12c78] transition-colors hover:text-[#42194c]" data-testid="link-gallery-masquerade-flyer">View full flyer <ArrowUpRight size={13} /></Link>}
+               </div>
             ))}
           </div>
         </div>
@@ -670,6 +677,7 @@ function App() {
   return (
     <Switch>
       <Route path="/hosting" component={HostingPage} />
+      <Route path="/archive/flyer/:id" component={FlyerPage} />
       <Route path="/archive" component={ArchivePage} />
       <Route path="/" component={HomePage} />
       <Route component={() => (
