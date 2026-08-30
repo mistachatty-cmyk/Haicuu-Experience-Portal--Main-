@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { ArrowLeft, ArrowUpRight, ChevronLeft, ChevronRight, X } from 'lucide-react';
 import { Link } from 'wouter';
 
@@ -32,6 +32,16 @@ import archive9496 from '@assets/IMG_9496_1788105157821.jpeg';
 import archive9497 from '@assets/IMG_9497_1788105157821.jpeg';
 import archive9498 from '@assets/IMG_9498_1788105157821.jpeg';
 import archive9499 from '@assets/IMG_9499_1788105157821.jpeg';
+import archive9500 from '@assets/IMG_9500_1788105157821.jpeg';
+import archive9501 from '@assets/IMG_9501_1788105157821.jpeg';
+import archive9502 from '@assets/IMG_9502_1788105157821.jpeg';
+import archive9503 from '@assets/IMG_9503_1788105157821.jpeg';
+import archive9504 from '@assets/IMG_9504_1788105157821.jpeg';
+import archive9505 from '@assets/IMG_9505_1788105157821.jpeg';
+import archive9506 from '@assets/IMG_9506_1788105157821.jpeg';
+import archive9507 from '@assets/IMG_9507_1788105157821.jpeg';
+import archive9508 from '@assets/IMG_9508_1788105157821.jpeg';
+import archive9509 from '@assets/IMG_9509_1788105157821.jpeg';
 import archive9510 from '@assets/IMG_9510_1788105157821.jpeg';
 import archive9511 from '@assets/IMG_9511_1788105157821.jpeg';
 import archive9512 from '@assets/IMG_9512_1788105157821.jpeg';
@@ -62,6 +72,8 @@ const flyerItems: ArchiveItem[] = [
   { id: '9496', src: archive9496, kind: 'flyers', shape: 'portrait', alt: 'Pink Hai Cuu poster with colorful lettering, illustrated figures, and the words special event', caption: 'A pink Hai Cuu special-event poster filled with illustrated figures.' },
   { id: '9497', src: archive9497, kind: 'flyers', shape: 'portrait', alt: 'ArtPrize poster featuring Cuju Josama, a colorful geometric border, and a circular portrait', caption: 'An ArtPrize poster featuring Cuju Josama inside a colorful border.' },
   { id: '9498', src: archive9498, kind: 'flyers', shape: 'portrait', alt: 'Pink price list poster with hand-lettered categories and dollar amounts', caption: 'A pink hand-lettered price list with categories and dollar amounts.' },
+  { id: '9500', src: archive9500, kind: 'flyers', shape: 'portrait', alt: 'Pink Hai Cuu Experience flyer with wine glasses, a llama illustration, and a ladies night event notice', caption: 'A pink Hai Cuu Experience flyer framed by wine glasses and a llama illustration.' },
+  { id: '9502', src: archive9502, kind: 'flyers', shape: 'square', alt: 'Black and red event graphic featuring Cuju Josama and a guest judge', caption: 'A black-and-red event graphic pairing Cuju Josama with a guest judge.' },
   { id: '9511', src: archive9511, kind: 'flyers', shape: 'portrait', alt: 'Pink Hai Cuu flyer with illustrated figures, bright lettering, and a special-event title', caption: 'A pink Hai Cuu flyer built from bright lettering and illustrated figures.' },
   { id: '9512', src: archive9512, kind: 'flyers', shape: 'portrait', alt: 'Black and white poster reading The Hai Cuu Experience and Museum with a portrait illustration', caption: 'A black-and-white Hai Cuu Experience museum poster.' },
   { id: '9513', src: archive9513, kind: 'flyers', shape: 'portrait', alt: 'Pink breast cancer awareness event flyer for the Hai Cuu Experience with a ribbon graphic', caption: 'A pink Hai Cuu Experience event flyer with a large ribbon graphic.' },
@@ -88,6 +100,14 @@ const photographItems: ArchiveItem[] = [
   { id: '9494', src: archive9494, kind: 'photographs', shape: 'portrait', alt: 'Person standing in purple light beside a large speaker or audio setup', caption: 'A figure and an audio setup share a room washed in purple light.' },
   { id: '9495', src: archive9495, kind: 'photographs', shape: 'portrait', alt: 'Person standing beside a large framed artwork in a dim gallery', caption: 'A figure stands beside a large framed artwork in a gallery.' },
   { id: '9499', src: archive9499, kind: 'photographs', shape: 'portrait', alt: 'Pink painted buckets or containers arranged outdoors beside a railing', caption: 'Pink painted buckets catch the light beside an outdoor railing.' },
+  { id: '9501', src: archive9501, kind: 'photographs', shape: 'square', alt: 'Portrait of Cuju Josama holding a pendant between two open hands', caption: 'Cuju Josama holds a pendant between two open hands.' },
+  { id: '9503', src: archive9503, kind: 'photographs', shape: 'landscape', alt: 'Large group gathered together in a purple-lit room with artwork on the walls', caption: 'A full room gathers together beneath purple light and artwork.' },
+  { id: '9504', src: archive9504, kind: 'photographs', shape: 'landscape', alt: 'Large group smiling and posing together indoors', caption: 'A roomful of people leans into one shared photograph.' },
+  { id: '9505', src: archive9505, kind: 'photographs', shape: 'landscape', alt: 'Cuju Josama standing beside a colorful outdoor mural', caption: 'Cuju Josama pauses beside a colorful outdoor mural.' },
+  { id: '9506', src: archive9506, kind: 'photographs', shape: 'square', alt: 'Close portrait of Cuju Josama speaking into a microphone outdoors', caption: 'A close portrait of Cuju Josama speaking into a microphone.' },
+  { id: '9507', src: archive9507, kind: 'photographs', shape: 'square', alt: 'Cuju Josama performing with a microphone under blue stage light', caption: 'Cuju Josama performs under blue stage light.' },
+  { id: '9508', src: archive9508, kind: 'photographs', shape: 'landscape', alt: 'Cuju Josama standing in front of a large artwork under green light', caption: 'Cuju Josama stands with a large artwork glowing behind him.' },
+  { id: '9509', src: archive9509, kind: 'photographs', shape: 'portrait', alt: 'Cuju Josama looking toward a large artwork under green light', caption: 'Cuju Josama turns toward the artwork in a room washed with green light.' },
   { id: '9510', src: archive9510, kind: 'photographs', shape: 'landscape', alt: 'Figure in layered clothing standing in a vivid green room or light installation', caption: 'A layered figure stands inside vivid green light.' },
 ];
 
@@ -118,6 +138,8 @@ function ArchiveCard({ item, index, onOpen }: { item: ArchiveItem; index: number
 function ArchivePage() {
   const [filter, setFilter] = useState<'all' | ArchiveKind>('all');
   const [lightbox, setLightbox] = useState<ArchiveItem | null>(null);
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
+  const previouslyFocusedRef = useRef<HTMLElement | null>(null);
   const visibleItems = useMemo(
     () => filter === 'all' ? archiveItems : archiveItems.filter((item) => item.kind === filter),
     [filter],
@@ -127,18 +149,30 @@ function ArchivePage() {
 
   useEffect(() => {
     const previousTitle = document.title;
+    const metaValues = [
+      ['meta[name="description"]', 'A living scrapbook of flyers, photographs, sound, and community from The Haicuu Experience by Llama State Productions.'],
+      ['meta[property="og:title"]', 'The Archive | The Haicuu Experience'],
+      ['meta[property="og:description"]', 'Explore the flyers, faces, and shared moments behind The Haicuu Experience.'],
+      ['meta[name="twitter:title"]', 'The Archive | The Haicuu Experience'],
+      ['meta[name="twitter:description"]', 'Explore the flyers, faces, and shared moments behind The Haicuu Experience.'],
+    ] as const;
     document.title = 'The Archive | The Haicuu Experience';
-    const description = document.querySelector('meta[name="description"]');
-    const previousDescription = description?.getAttribute('content') ?? '';
-    description?.setAttribute('content', 'A living scrapbook of flyers, photographs, sound, and community from The Haicuu Experience by Llama State Productions.');
+    const previousMetaValues = metaValues.map(([selector, value]) => {
+      const element = document.querySelector<HTMLMetaElement>(selector);
+      const previousContent = element?.getAttribute('content') ?? '';
+      element?.setAttribute('content', value);
+      return [element, previousContent] as const;
+    });
     return () => {
       document.title = previousTitle;
-      description?.setAttribute('content', previousDescription);
+      previousMetaValues.forEach(([element, content]) => element?.setAttribute('content', content));
     };
   }, []);
 
   useEffect(() => {
     if (!lightbox) return;
+    previouslyFocusedRef.current = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+    closeButtonRef.current?.focus();
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') setLightbox(null);
       if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
@@ -153,6 +187,8 @@ function ArchivePage() {
     return () => {
       document.body.style.overflow = '';
       window.removeEventListener('keydown', onKeyDown);
+      previouslyFocusedRef.current?.focus();
+      previouslyFocusedRef.current = null;
     };
   }, [lightbox, visibleItems]);
 
@@ -294,7 +330,7 @@ function ArchivePage() {
           onClick={() => setLightbox(null)}
           data-testid="dialog-archive-lightbox"
         >
-          <button type="button" onClick={() => setLightbox(null)} className="archive-lightbox__close" data-testid="button-archive-close-lightbox" aria-label="Close expanded archive image">
+          <button ref={closeButtonRef} type="button" onClick={() => setLightbox(null)} className="archive-lightbox__close" data-testid="button-archive-close-lightbox" aria-label="Close expanded archive image">
             <X size={20} />
           </button>
           <button type="button" onClick={(event) => { event.stopPropagation(); moveLightbox(-1); }} className="archive-lightbox__arrow archive-lightbox__arrow--left" data-testid="button-archive-previous" aria-label="Previous archive image">
