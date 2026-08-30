@@ -141,10 +141,17 @@ function HostingPage() {
                 </div>
                 <Mail className="shrink-0 text-[#86dce9]" size={25} />
               </div>
-              <p className="mt-8 max-w-[470px] text-base leading-7 text-[#d9bfd2]">You bring the room, the people, and the reason to gather. Cujo Sama brings the welcome, the rhythm, and the unmistakable energy that makes an event feel alive.</p>
+              <p className="mt-8 max-w-[470px] text-base leading-7 text-[#d9bfd2]">You bring the room, the people, and the reason to gather. Cujo Sama brings the welcome, the rhythm, and the unmistakable energy that makes an event feel alive. This is the host-only appearance—not the full Haicuu production.</p>
+              <div className="hosting-quote-notes mt-8 border-y border-[#eac8df]/20 py-5" aria-label="Host-only quote scope">
+                <p className="font-mono-custom text-[9px] uppercase tracking-[.13em] text-[#86dce9]">what the range means</p>
+                <ul className="mt-3 grid gap-2 text-sm leading-6 text-[#f4ddeb]">
+                  <li className="hosting-quote-note"><Check size={14} className="mt-1 shrink-0 text-[#86dce9]" />Cujo Sama’s live hosting appearance for your gathering.</li>
+                  <li className="hosting-quote-note"><Check size={14} className="mt-1 shrink-0 text-[#86dce9]" />Production, travel, and event details are confirmed with you before the final quote.</li>
+                </ul>
+              </div>
               <div className="mt-8 flex items-end justify-between gap-5 border-t border-[#eac8df]/20 pt-6">
-                <div><p className="font-mono-custom text-[9px] uppercase tracking-[.13em] text-[#86dce9]">host-only invitation</p><p className="mt-2 font-display text-5xl text-[#f362b6]">$4,000–$5,000</p></div>
-                <span className="max-w-[135px] text-right font-mono-custom text-[9px] uppercase leading-4 tracking-[.1em] text-[#d9bfd2]">final quote depends on the event</span>
+                <div><p className="font-mono-custom text-[9px] uppercase tracking-[.13em] text-[#86dce9]">indicative host-only range</p><p className="mt-2 font-display text-5xl text-[#f362b6]">$4,000–$5,000</p></div>
+                <span className="max-w-[150px] text-right font-mono-custom text-[9px] uppercase leading-4 tracking-[.1em] text-[#d9bfd2]">final quote confirmed in conversation</span>
               </div>
             </article>
           </div>

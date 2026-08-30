@@ -192,6 +192,8 @@
 .hosting-intro { background: #f8eddf; }
 .hosting-package { min-height: 100%; transition: transform .45s cubic-bezier(.22, .8, .26, 1), box-shadow .45s ease; }
 .hosting-package:hover { transform: translateY(-6px); }
+.hosting-quote-notes { background: rgba(48, 32, 57, .28); }
+.hosting-quote-note { display: flex; align-items: flex-start; gap: .65rem; }
 .hosting-scene { background: #86dce9; }
 .hosting-inquire { background: #f8eddf; }
 .scribble { text-decoration: underline; text-decoration-style: wavy; text-decoration-thickness: 2px; text-underline-offset: 7px; }
