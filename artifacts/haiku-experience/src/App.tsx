@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   ArrowDown,
   ArrowUpRight,
@@ -27,8 +27,27 @@ import bannerImage from '@assets/IMG_9311_1788103115409.jpeg';
 
 type Track = { id: number; title: string; artist: string; note: string; link: string };
 type GalleryItem = { id: number; src: string; alt: string; caption: string; tone: string };
+type ExperienceEvent = {
+  id: number;
+  name: string;
+  date: string;
+  time: string;
+  venue: string;
+  price: number;
+  earlyBirdPrice: number;
+  earlyBirdCutoff: string;
+};
+type OfferSettings = {
+  contactDiscountEnabled: boolean;
+  contactDiscount: number;
+  stackDiscounts: boolean;
+};
 
 const CREATOR_CODE = 'coosix1414';
+const EVENTS_STORAGE_KEY = 'haiku-experience-events';
+const OFFERS_STORAGE_KEY = 'haiku-experience-offers';
+const TRACKS_STORAGE_KEY = 'haiku-experience-tracks';
+const GALLERY_STORAGE_KEY = 'haiku-experience-gallery';
 
 const initialTracks: Track[] = [
   { id: 1, title: 'Clouds in the Kitchen', artist: 'Llama State Radio 01', note: 'for making tea at midnight', link: '#' },
@@ -42,10 +61,76 @@ const initialGallery: GalleryItem[] = [
   { id: 3, src: logoImage, alt: 'The Llama State Productions circular logo', caption: 'the keeper / est. 1998', tone: 'rotate-[-1deg]' },
 ];
 
+const initialEvents: ExperienceEvent[] = [
+  {
+    id: 1,
+    name: 'The September Room',
+    date: '2026-09-19',
+    time: '6:30 PM',
+    venue: 'The Llama House',
+    price: 28,
+    earlyBirdPrice: 22,
+    earlyBirdCutoff: '2026-09-05',
+  },
+  {
+    id: 2,
+    name: 'The October Afterglow',
+    date: '2026-10-17',
+    time: '7:00 PM',
+    venue: 'The Llama House',
+    price: 32,
+    earlyBirdPrice: 26,
+    earlyBirdCutoff: '2026-10-01',
+  },
+];
+
+const initialOfferSettings: OfferSettings = {
+  contactDiscountEnabled: true,
+  contactDiscount: 4,
+  stackDiscounts: false,
+};
+
+function readStored<T>(key: string, fallback: T): T {
+  if (typeof window === 'undefined') return fallback;
+  try {
+    const stored = window.localStorage.getItem(key);
+    return stored ? (JSON.parse(stored) as T) : fallback;
+  } catch {
+    return fallback;
+  }
+}
+
+function formatEventDate(date: string) {
+  return new Intl.DateTimeFormat('en-US', {
+    month: 'long',
+    day: 'numeric',
+    year: 'numeric',
+  }).format(new Date(`${date}T12:00:00`));
+}
+
+function formatMonthYear(date: string) {
+  return new Intl.DateTimeFormat('en-US', {
+    month: 'long',
+    year: 'numeric',
+  }).format(new Date(`${date}T12:00:00`));
+}
+
+function isValidContact(value: string) {
+  const trimmed = value.trim();
+  const email = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmed);
+  const phone = trimmed.replace(/\D/g, '').length >= 7;
+  return email || phone;
+}
+
 function App() {
   const [purchaseOpen, setPurchaseOpen] = useState(false);
   const [tickets, setTickets] = useState(1);
   const [reserved, setReserved] = useState(false);
+  const [events, setEvents] = useState<ExperienceEvent[]>(() => readStored(EVENTS_STORAGE_KEY, initialEvents));
+  const [selectedEventId, setSelectedEventId] = useState(() => readStored<ExperienceEvent[]>(EVENTS_STORAGE_KEY, initialEvents)[0]?.id ?? initialEvents[0].id);
+  const [offerSettings, setOfferSettings] = useState<OfferSettings>(() => readStored(OFFERS_STORAGE_KEY, initialOfferSettings));
+  const [contactValue, setContactValue] = useState('');
+  const [contactError, setContactError] = useState('');
   const [waitlistEmail, setWaitlistEmail] = useState('');
   const [waitlisted, setWaitlisted] = useState(false);
   const [playing, setPlaying] = useState<number | null>(null);
@@ -54,11 +139,50 @@ function App() {
   const [unlocked, setUnlocked] = useState(false);
   const [code, setCode] = useState('');
   const [codeError, setCodeError] = useState('');
-  const [creatorTracks, setCreatorTracks] = useState<Track[]>(initialTracks);
-  const [creatorGallery, setCreatorGallery] = useState<GalleryItem[]>(initialGallery);
+  const [creatorTracks, setCreatorTracks] = useState<Track[]>(() => readStored(TRACKS_STORAGE_KEY, initialTracks));
+  const [creatorGallery, setCreatorGallery] = useState<GalleryItem[]>(() => readStored(GALLERY_STORAGE_KEY, initialGallery));
   const [newTrack, setNewTrack] = useState({ title: '', link: '' });
   const [newImage, setNewImage] = useState('');
+  const [newEvent, setNewEvent] = useState({
+    name: '',
+    date: '2026-11-14',
+    time: '6:30 PM',
+    venue: 'The Llama House',
+    price: '28',
+    earlyBirdPrice: '22',
+    earlyBirdCutoff: '2026-11-01',
+  });
+  const [eventError, setEventError] = useState('');
   const [toast, setToast] = useState('');
+
+  const selectedEvent = events.find((event) => event.id === selectedEventId) ?? events[0] ?? initialEvents[0];
+  const featuredEvent = events[0] ?? initialEvents[0];
+  const eventPricingValid = selectedEvent.price > 0 && selectedEvent.earlyBirdPrice >= 0 && selectedEvent.earlyBirdPrice <= selectedEvent.price;
+  const earlyBirdActive = eventPricingValid && new Date(`${selectedEvent.earlyBirdCutoff}T23:59:59`) >= new Date() && selectedEvent.earlyBirdPrice < selectedEvent.price;
+  const earlyBirdSavings = earlyBirdActive ? Math.max(0, selectedEvent.price - selectedEvent.earlyBirdPrice) : 0;
+  const contactEligible = offerSettings.contactDiscountEnabled && isValidContact(contactValue);
+  const contactSavings = contactEligible ? Math.min(selectedEvent.price, Math.max(0, offerSettings.contactDiscount)) : 0;
+  const appliedSavings = offerSettings.stackDiscounts
+    ? earlyBirdSavings + contactSavings
+    : Math.max(earlyBirdSavings, contactSavings);
+  const unitPrice = Math.max(0, selectedEvent.price - appliedSavings);
+  const orderTotal = unitPrice * tickets;
+
+  useEffect(() => {
+    window.localStorage.setItem(EVENTS_STORAGE_KEY, JSON.stringify(events));
+  }, [events]);
+
+  useEffect(() => {
+    window.localStorage.setItem(OFFERS_STORAGE_KEY, JSON.stringify(offerSettings));
+  }, [offerSettings]);
+
+  useEffect(() => {
+    window.localStorage.setItem(TRACKS_STORAGE_KEY, JSON.stringify(creatorTracks));
+  }, [creatorTracks]);
+
+  useEffect(() => {
+    window.localStorage.setItem(GALLERY_STORAGE_KEY, JSON.stringify(creatorGallery));
+  }, [creatorGallery]);
 
   const showToast = (message: string) => {
     setToast(message);
@@ -78,8 +202,56 @@ function App() {
   };
 
   const reserve = () => {
+    if (contactValue.trim() && !isValidContact(contactValue)) {
+      setContactError('Enter a valid email or phone number to unlock the contact offer.');
+      return;
+    }
     setReserved(true);
-    showToast(`${tickets} ${tickets === 1 ? 'place' : 'places'} held for September.`);
+    showToast(`${tickets} ${tickets === 1 ? 'place' : 'places'} held for ${selectedEvent.name}.`);
+  };
+
+  const updateEventText = (id: number, field: 'name' | 'date' | 'time' | 'venue' | 'earlyBirdCutoff', value: string) => {
+    setEvents((current) => current.map((event) => event.id === id ? { ...event, [field]: value } : event));
+  };
+
+  const updateEventNumber = (id: number, field: 'price' | 'earlyBirdPrice', value: string) => {
+    const numericValue = Math.max(0, Number(value) || 0);
+    setEvents((current) => current.map((event) => event.id === id ? { ...event, [field]: numericValue } : event));
+  };
+
+  const addEvent = () => {
+    const price = Number(newEvent.price);
+    const earlyBirdPrice = Number(newEvent.earlyBirdPrice);
+    if (!newEvent.name.trim() || !newEvent.date || !Number.isFinite(price) || price <= 0 || !Number.isFinite(earlyBirdPrice) || earlyBirdPrice < 0 || earlyBirdPrice > price) {
+      setEventError('Add a name, date, and valid prices. The early-bird price cannot be higher than the standard price.');
+      return;
+    }
+    const createdEvent: ExperienceEvent = {
+      id: Date.now(),
+      name: newEvent.name.trim(),
+      date: newEvent.date,
+      time: newEvent.time.trim() || '6:30 PM',
+      venue: newEvent.venue.trim() || 'The Llama House',
+      price,
+      earlyBirdPrice,
+      earlyBirdCutoff: newEvent.earlyBirdCutoff || newEvent.date,
+    };
+    setEvents((current) => [...current, createdEvent]);
+    setSelectedEventId(createdEvent.id);
+    setNewEvent({ name: '', date: '2026-11-14', time: '6:30 PM', venue: 'The Llama House', price: '28', earlyBirdPrice: '22', earlyBirdCutoff: '2026-11-01' });
+    setEventError('');
+    showToast('A new evening joined the calendar.');
+  };
+
+  const removeEvent = (id: number) => {
+    if (events.length <= 1) {
+      setEventError('Keep at least one event available for guests.');
+      return;
+    }
+    const remaining = events.filter((event) => event.id !== id);
+    setEvents(remaining);
+    if (selectedEventId === id) setSelectedEventId(remaining[0].id);
+    showToast('That evening was removed from the calendar.');
   };
 
   const addTrack = () => {
@@ -185,8 +357,8 @@ function App() {
               <article className="rounded-[1.4rem] bg-[#42194c] p-7 text-[#ffecd5] shadow-[0_8px_0_#e74eaa] sm:translate-y-8">
                 <CalendarDays size={25} className="mb-12 text-[#f362b6]" />
                 <p className="section-label text-[#e7a5ca]">when</p>
-                <h3 className="mt-3 font-display text-4xl">September<br />2025</h3>
-                <p className="mt-4 font-mono-custom text-[10px] uppercase leading-5 tracking-[.11em] text-[#f6c8df]">a secret Saturday<br />doors at 6:30 pm</p>
+                <h3 className="mt-3 font-display text-4xl">{formatMonthYear(featuredEvent.date)}<br />{featuredEvent.name.replace('The ', '')}</h3>
+                <p className="mt-4 font-mono-custom text-[10px] uppercase leading-5 tracking-[.11em] text-[#f6c8df]">{formatEventDate(featuredEvent.date)}<br />doors at {featuredEvent.time}</p>
               </article>
               <article className="rounded-[1.4rem] bg-[#8edfea] p-7 text-[#42194c] shadow-[0_8px_0_#6fc3d0]">
                 <MapPin size={25} className="mb-12" />
@@ -309,7 +481,7 @@ function App() {
           <div className="flex flex-col justify-between gap-12 border-b border-[#eac8df]/20 pb-14 md:flex-row">
             <div>
               <img src={logoImage} alt="Llama State Productions" className="h-20 w-20 rounded-full object-cover" data-testid="img-footer-logo" />
-              <p className="mt-5 max-w-[260px] font-display text-3xl leading-none text-[#f362b6]">Make room<br />for wonder.</p>
+               <p className="mt-5 max-w-[300px] font-display text-3xl leading-none text-[#f362b6]">Make room<br />for wonder.</p>
             </div>
             <div className="grid grid-cols-2 gap-x-14 gap-y-4 self-end font-mono-custom text-[10px] uppercase tracking-[.15em] text-[#cc9fbd]">
               <a href="#top" className="transition-colors hover:text-[#ffe06a]" data-testid="link-footer-top">Back to top</a>
@@ -319,7 +491,7 @@ function App() {
             </div>
           </div>
           <div className="flex flex-col justify-between gap-3 pt-6 font-mono-custom text-[9px] uppercase tracking-[.14em] text-[#8f6a87] md:flex-row">
-            <span>Llama State Productions / est. 1998</span><span>made slowly, somewhere warm</span>
+             <span>Llama State Productions / est. 1998</span><span>Llamamaste</span>
           </div>
         </div>
       </footer>
@@ -330,14 +502,42 @@ function App() {
             <button onClick={() => setPurchaseOpen(false)} className="absolute right-5 top-5 grid h-9 w-9 place-items-center rounded-full border border-[#d9bfd2] transition-colors hover:bg-[#f362b6]" data-testid="button-close-purchase" aria-label="Close reservation panel"><X size={17} /></button>
             {!reserved ? (
               <>
-                <p className="section-label text-[#b12c78]">September / The Llama House</p>
+                <p className="section-label text-[#b12c78]">choose your evening</p>
                 <h2 className="mt-4 font-display text-5xl leading-none">Save a spot<br /><span className="text-[#e94fa9]">in the soft room.</span></h2>
-                <div className="mt-8 flex items-center justify-between border-y border-[#d9bfd2] py-5"><div><p className="font-display text-xl">General admission</p><p className="mt-1 font-mono-custom text-[10px] uppercase tracking-[.1em] text-[#795b7a]">$28 / place</p></div><div className="flex items-center gap-3"><button onClick={() => setTickets((value) => Math.max(1, value - 1))} className="grid h-9 w-9 place-items-center rounded-full border border-[#b12c78]" data-testid="button-decrease-tickets">−</button><span className="w-5 text-center font-mono-custom" data-testid="text-ticket-count">{tickets}</span><button onClick={() => setTickets((value) => Math.min(6, value + 1))} className="grid h-9 w-9 place-items-center rounded-full border border-[#b12c78]" data-testid="button-increase-tickets">+</button></div></div>
-                <button onClick={reserve} className="mt-7 flex w-full items-center justify-center gap-3 rounded-full bg-[#42194c] px-6 py-4 text-xs font-bold uppercase tracking-[.13em] text-[#ffecd5] transition-transform hover:-translate-y-1" data-testid="button-confirm-reservation">Hold {tickets} {tickets === 1 ? 'place' : 'places'} <ArrowUpRight size={16} /></button>
+                <label htmlFor="event-select" className="mt-8 block font-mono-custom text-[10px] uppercase tracking-[.12em] text-[#795b7a]">The next gathering</label>
+                <select
+                  id="event-select"
+                  value={selectedEvent.id}
+                  onChange={(event) => { setSelectedEventId(Number(event.target.value)); setReserved(false); setContactError(''); }}
+                  className="mt-2 w-full rounded-full border border-[#d9bfd2] bg-[#fdf4e8] px-5 py-3 text-sm outline-none focus:border-[#df4b9f]"
+                  data-testid="select-event"
+                >
+                  {events.map((event) => <option key={event.id} value={event.id}>{event.name} / {formatEventDate(event.date)}</option>)}
+                </select>
+                <div className="mt-4 grid grid-cols-2 gap-3 text-sm">
+                  <div className="rounded-[1rem] bg-[#ffe06a]/45 p-4"><p className="font-mono-custom text-[9px] uppercase tracking-[.1em] text-[#795b7a]">when</p><p className="mt-2 font-display text-xl">{formatEventDate(selectedEvent.date)}</p><p className="mt-1 text-xs text-[#684d6e]">{selectedEvent.time}</p></div>
+                  <div className="rounded-[1rem] bg-[#86dce9]/35 p-4"><p className="font-mono-custom text-[9px] uppercase tracking-[.1em] text-[#795b7a]">where</p><p className="mt-2 font-display text-xl">{selectedEvent.venue}</p><p className="mt-1 text-xs text-[#684d6e]">address with your ticket</p></div>
+                </div>
+                <div className="mt-5 flex items-center justify-between border-y border-[#d9bfd2] py-5">
+                  <div><p className="font-display text-xl">General admission</p><p className="mt-1 font-mono-custom text-[10px] uppercase tracking-[.1em] text-[#795b7a]">${selectedEvent.price.toFixed(2)} / place</p></div>
+                  <div className="flex items-center gap-3"><button onClick={() => setTickets((value) => Math.max(1, value - 1))} className="grid h-9 w-9 place-items-center rounded-full border border-[#b12c78]" data-testid="button-decrease-tickets">−</button><span className="w-5 text-center font-mono-custom" data-testid="text-ticket-count">{tickets}</span><button onClick={() => setTickets((value) => Math.min(6, value + 1))} className="grid h-9 w-9 place-items-center rounded-full border border-[#b12c78]" data-testid="button-increase-tickets">+</button></div>
+                </div>
+                <div className="mt-5">
+                  <label htmlFor="contact-offer" className="font-mono-custom text-[10px] uppercase tracking-[.12em] text-[#795b7a]">Want the contact offer?</label>
+                  <input id="contact-offer" value={contactValue} onChange={(event) => { setContactValue(event.target.value); setContactError(''); }} placeholder="email or mobile number" className="mt-2 w-full rounded-full border border-[#d9bfd2] bg-transparent px-5 py-3 text-sm outline-none placeholder:text-[#9a7b91] focus:border-[#df4b9f]" data-testid="input-contact-offer" />
+                  {contactError && <p className="mt-2 font-mono-custom text-[10px] text-[#b12c78]" data-testid="text-contact-error">{contactError}</p>}
+                  {offerSettings.contactDiscountEnabled && <p className="mt-2 text-xs text-[#795b7a]">{contactEligible ? `Contact offer applied: $${contactSavings.toFixed(2)} off per place.` : `Add a valid email or phone for $${offerSettings.contactDiscount.toFixed(2)} off per place.`}</p>}
+                </div>
+                <div className="mt-6 rounded-[1rem] bg-[#42194c] p-5 text-[#ffecd5]" data-testid="pricing-summary">
+                  <div className="flex items-center justify-between font-mono-custom text-[10px] uppercase tracking-[.1em] text-[#d9bfd2]"><span>{tickets} {tickets === 1 ? 'place' : 'places'} x ${selectedEvent.price.toFixed(2)}</span><span>${(selectedEvent.price * tickets).toFixed(2)}</span></div>
+                  <div className="mt-3 flex items-start justify-between gap-4 border-t border-[#eac8df]/20 pt-3 text-xs"><div>{earlyBirdActive && <p className="text-[#ffe06a]">Early bird · ${earlyBirdSavings.toFixed(2)} off each</p>}{!earlyBirdActive && <p className="text-[#d9bfd2]">Early bird offer has ended for this evening.</p>}{contactEligible && <p className="mt-1 text-[#86dce9]">Contact offer · ${contactSavings.toFixed(2)} off each</p>}<p className="mt-2 font-mono-custom text-[9px] uppercase tracking-[.1em] text-[#d9bfd2]">{offerSettings.stackDiscounts ? 'Eligible offers stack' : 'Best eligible offer applied'}</p></div><strong className="font-display text-3xl text-[#f362b6]">${orderTotal.toFixed(2)}</strong></div>
+                </div>
+                {!eventPricingValid && <p className="mt-4 rounded-[.8rem] bg-[#ffe06a]/45 px-4 py-3 font-mono-custom text-[10px] uppercase tracking-[.08em] text-[#7f1c67]" data-testid="text-pricing-error">This evening needs a valid standard and early-bird price before reservations can open.</p>}
+                <button onClick={reserve} disabled={!eventPricingValid} className="mt-7 flex w-full items-center justify-center gap-3 rounded-full bg-[#42194c] px-6 py-4 text-xs font-bold uppercase tracking-[.13em] text-[#ffecd5] transition-transform hover:-translate-y-1 disabled:cursor-not-allowed disabled:opacity-45 disabled:hover:translate-y-0" data-testid="button-confirm-reservation">Hold {tickets} {tickets === 1 ? 'place' : 'places'} <ArrowUpRight size={16} /></button>
                 <p className="mt-4 text-center font-mono-custom text-[9px] uppercase tracking-[.1em] text-[#795b7a]">No payment yet / this is a gentle hold</p>
               </>
             ) : (
-              <div className="py-10 text-center" data-testid="status-reservation-confirmed"><div className="mx-auto grid h-16 w-16 place-items-center rounded-full bg-[#f362b6]"><Check size={30} /></div><h2 className="mt-6 font-display text-5xl">You are in.</h2><p className="mx-auto mt-4 max-w-[320px] leading-6 text-[#684d6e]">Your little group of {tickets} is held. We will send the exact address before the evening begins.</p><button onClick={() => setPurchaseOpen(false)} className="mt-7 rounded-full border border-[#42194c] px-6 py-3 text-[10px] font-bold uppercase tracking-[.13em]" data-testid="button-close-confirmation">Keep exploring</button></div>
+              <div className="py-10 text-center" data-testid="status-reservation-confirmed"><div className="mx-auto grid h-16 w-16 place-items-center rounded-full bg-[#f362b6] text-[#42194c]"><Check size={30} /></div><p className="section-label mt-7 text-[#b12c78]">{selectedEvent.name}</p><h2 className="mt-3 font-display text-5xl">You are in.</h2><p className="mx-auto mt-4 max-w-[350px] leading-6 text-[#684d6e]">Your little group of {tickets} is held for {formatEventDate(selectedEvent.date)}. The total held is ${orderTotal.toFixed(2)}. We will send the exact address before the evening begins.</p><button onClick={() => { setPurchaseOpen(false); setReserved(false); }} className="mt-7 rounded-full border border-[#42194c] px-6 py-3 text-[10px] font-bold uppercase tracking-[.13em]" data-testid="button-close-confirmation">Keep exploring</button></div>
             )}
           </div>
         </div>
@@ -371,7 +571,52 @@ function App() {
         <section className="border-t-4 border-[#f362b6] bg-[#42194c] px-5 py-20 text-[#ffecd5] md:px-10" data-testid="section-creator-controls">
           <div className="mx-auto max-w-[1180px]">
             <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end"><div><p className="section-label text-[#ffe06a]">private room / local state</p><h2 className="mt-4 font-display text-5xl leading-none md:text-7xl">Keep the world<br /><span className="text-[#f362b6]">growing.</span></h2></div><button onClick={() => setUnlocked(false)} className="flex items-center gap-2 self-start rounded-full border border-[#eac8df]/30 px-4 py-2 font-mono-custom text-[9px] uppercase tracking-[.12em] text-[#d9bfd2] hover:border-[#f362b6] hover:text-[#f362b6]" data-testid="button-close-creator">Close private room <X size={13} /></button></div>
-            <div className="mt-12 grid gap-8 lg:grid-cols-2">
+             <div className="mt-12 grid gap-8 lg:grid-cols-2">
+               <div className="rounded-[1.4rem] border border-[#eac8df]/20 bg-[#302039] p-7 lg:col-span-2">
+                 <div className="flex items-center gap-3"><CalendarDays size={19} className="text-[#ffe06a]" /><div><h3 className="font-display text-2xl">Shape the calendar</h3><p className="mt-1 font-mono-custom text-[9px] uppercase tracking-[.12em] text-[#cc9fbd]">events guests can choose from</p></div></div>
+                 <div className="mt-7 grid gap-5">
+                   {events.map((event) => (
+                     <div key={event.id} className="rounded-[1rem] border border-[#eac8df]/15 bg-[#42194c] p-5">
+                       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                         <input value={event.name} onChange={(inputEvent) => updateEventText(event.id, 'name', inputEvent.target.value)} className="min-w-0 flex-1 rounded-full border border-[#eac8df]/20 bg-transparent px-4 py-2 font-display text-xl outline-none focus:border-[#86dce9]" aria-label={`${event.name} event name`} />
+                         <button onClick={() => removeEvent(event.id)} className="self-start rounded-full border border-[#eac8df]/20 px-3 py-2 font-mono-custom text-[9px] uppercase tracking-[.1em] text-[#d9bfd2] hover:border-[#f362b6] hover:text-[#f362b6] sm:self-auto" data-testid={`button-remove-event-${event.id}`}>Remove</button>
+                       </div>
+                       <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                         <label className="grid gap-2 font-mono-custom text-[9px] uppercase tracking-[.1em] text-[#cc9fbd]">Date<input type="date" value={event.date} onChange={(inputEvent) => updateEventText(event.id, 'date', inputEvent.target.value)} className="rounded-full border border-[#eac8df]/20 bg-[#302039] px-4 py-2 text-sm text-[#ffecd5] outline-none focus:border-[#86dce9]" /></label>
+                         <label className="grid gap-2 font-mono-custom text-[9px] uppercase tracking-[.1em] text-[#cc9fbd]">Doors time<input value={event.time} onChange={(inputEvent) => updateEventText(event.id, 'time', inputEvent.target.value)} className="rounded-full border border-[#eac8df]/20 bg-[#302039] px-4 py-2 text-sm text-[#ffecd5] outline-none focus:border-[#86dce9]" /></label>
+                         <label className="grid gap-2 font-mono-custom text-[9px] uppercase tracking-[.1em] text-[#cc9fbd]">Venue<input value={event.venue} onChange={(inputEvent) => updateEventText(event.id, 'venue', inputEvent.target.value)} className="rounded-full border border-[#eac8df]/20 bg-[#302039] px-4 py-2 text-sm text-[#ffecd5] outline-none focus:border-[#86dce9]" /></label>
+                         <label className="grid gap-2 font-mono-custom text-[9px] uppercase tracking-[.1em] text-[#cc9fbd]">Standard price<input type="number" min="0" step="1" value={event.price} onChange={(inputEvent) => updateEventNumber(event.id, 'price', inputEvent.target.value)} className="rounded-full border border-[#eac8df]/20 bg-[#302039] px-4 py-2 text-sm text-[#ffecd5] outline-none focus:border-[#86dce9]" /></label>
+                         <label className="grid gap-2 font-mono-custom text-[9px] uppercase tracking-[.1em] text-[#cc9fbd]">Early-bird price<input type="number" min="0" step="1" value={event.earlyBirdPrice} onChange={(inputEvent) => updateEventNumber(event.id, 'earlyBirdPrice', inputEvent.target.value)} className="rounded-full border border-[#eac8df]/20 bg-[#302039] px-4 py-2 text-sm text-[#ffecd5] outline-none focus:border-[#86dce9]" /></label>
+                         <label className="grid gap-2 font-mono-custom text-[9px] uppercase tracking-[.1em] text-[#cc9fbd]">Early-bird ends<input type="date" value={event.earlyBirdCutoff} onChange={(inputEvent) => updateEventText(event.id, 'earlyBirdCutoff', inputEvent.target.value)} className="rounded-full border border-[#eac8df]/20 bg-[#302039] px-4 py-2 text-sm text-[#ffecd5] outline-none focus:border-[#86dce9]" /></label>
+                       </div>
+                       <p className="mt-4 font-mono-custom text-[9px] uppercase tracking-[.1em] text-[#8f6a87]">Early bird is available through {event.earlyBirdCutoff ? formatEventDate(event.earlyBirdCutoff) : 'the selected cutoff'}.</p>
+                     </div>
+                   ))}
+                 </div>
+                 <div className="mt-8 border-t border-[#eac8df]/15 pt-7">
+                   <h4 className="font-display text-xl text-[#86dce9]">Add an evening</h4>
+                   <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+                     <input value={newEvent.name} onChange={(inputEvent) => setNewEvent({ ...newEvent, name: inputEvent.target.value })} placeholder="event name" className="rounded-full border border-[#eac8df]/20 bg-transparent px-4 py-2 text-sm outline-none placeholder:text-[#8f6a87] focus:border-[#86dce9]" data-testid="input-new-event-name" />
+                     <input type="date" value={newEvent.date} onChange={(inputEvent) => setNewEvent({ ...newEvent, date: inputEvent.target.value })} className="rounded-full border border-[#eac8df]/20 bg-[#302039] px-4 py-2 text-sm text-[#ffecd5] outline-none focus:border-[#86dce9]" data-testid="input-new-event-date" />
+                     <input value={newEvent.time} onChange={(inputEvent) => setNewEvent({ ...newEvent, time: inputEvent.target.value })} placeholder="doors time" className="rounded-full border border-[#eac8df]/20 bg-transparent px-4 py-2 text-sm outline-none placeholder:text-[#8f6a87] focus:border-[#86dce9]" />
+                     <input value={newEvent.venue} onChange={(inputEvent) => setNewEvent({ ...newEvent, venue: inputEvent.target.value })} placeholder="venue" className="rounded-full border border-[#eac8df]/20 bg-transparent px-4 py-2 text-sm outline-none placeholder:text-[#8f6a87] focus:border-[#86dce9]" />
+                     <input type="number" min="0" step="1" value={newEvent.price} onChange={(inputEvent) => setNewEvent({ ...newEvent, price: inputEvent.target.value })} placeholder="standard price" className="rounded-full border border-[#eac8df]/20 bg-transparent px-4 py-2 text-sm outline-none placeholder:text-[#8f6a87] focus:border-[#86dce9]" />
+                     <input type="number" min="0" step="1" value={newEvent.earlyBirdPrice} onChange={(inputEvent) => setNewEvent({ ...newEvent, earlyBirdPrice: inputEvent.target.value })} placeholder="early-bird price" className="rounded-full border border-[#eac8df]/20 bg-transparent px-4 py-2 text-sm outline-none placeholder:text-[#8f6a87] focus:border-[#86dce9]" />
+                     <input type="date" value={newEvent.earlyBirdCutoff} onChange={(inputEvent) => setNewEvent({ ...newEvent, earlyBirdCutoff: inputEvent.target.value })} className="rounded-full border border-[#eac8df]/20 bg-[#302039] px-4 py-2 text-sm text-[#ffecd5] outline-none focus:border-[#86dce9]" />
+                     <button onClick={addEvent} className="flex items-center justify-center gap-2 rounded-full bg-[#86dce9] px-5 py-2 text-[10px] font-bold uppercase tracking-[.12em] text-[#42194c]" data-testid="button-add-event"><Plus size={14} /> Add event</button>
+                   </div>
+                   {eventError && <p className="mt-3 font-mono-custom text-[10px] text-[#ffe06a]" data-testid="text-event-error">{eventError}</p>}
+                 </div>
+               </div>
+               <div className="rounded-[1.4rem] border border-[#eac8df]/20 bg-[#302039] p-7 lg:col-span-2">
+                 <div className="flex items-center gap-3"><Ticket size={19} className="text-[#ffe06a]" /><div><h3 className="font-display text-2xl">Price the invitation</h3><p className="mt-1 font-mono-custom text-[9px] uppercase tracking-[.12em] text-[#cc9fbd]">the rules guests will see at checkout</p></div></div>
+                 <div className="mt-6 grid gap-5 md:grid-cols-3">
+                   <label className="grid gap-2 font-mono-custom text-[9px] uppercase tracking-[.1em] text-[#cc9fbd]">Contact offer per place<input type="number" min="0" step="1" value={offerSettings.contactDiscount} onChange={(inputEvent) => setOfferSettings({ ...offerSettings, contactDiscount: Math.max(0, Number(inputEvent.target.value) || 0) })} className="rounded-full border border-[#eac8df]/20 bg-transparent px-4 py-3 text-sm text-[#ffecd5] outline-none focus:border-[#86dce9]" data-testid="input-contact-discount" /></label>
+                   <label className="flex items-center gap-3 rounded-[1rem] border border-[#eac8df]/15 bg-[#42194c] px-4 py-3 font-mono-custom text-[10px] uppercase tracking-[.1em] text-[#ffecd5]"><input type="checkbox" checked={offerSettings.contactDiscountEnabled} onChange={(inputEvent) => setOfferSettings({ ...offerSettings, contactDiscountEnabled: inputEvent.target.checked })} className="h-4 w-4 accent-[#f362b6]" data-testid="checkbox-contact-discount" /><span>Offer discount for a valid email or phone</span></label>
+                   <label className="grid gap-2 font-mono-custom text-[9px] uppercase tracking-[.1em] text-[#cc9fbd]">When offers overlap<select value={offerSettings.stackDiscounts ? 'stack' : 'best'} onChange={(inputEvent) => setOfferSettings({ ...offerSettings, stackDiscounts: inputEvent.target.value === 'stack' })} className="rounded-full border border-[#eac8df]/20 bg-[#42194c] px-4 py-3 text-sm text-[#ffecd5] outline-none focus:border-[#86dce9]" data-testid="select-discount-behavior"><option value="best">Use the best eligible offer</option><option value="stack">Stack eligible offers</option></select></label>
+                 </div>
+                 <p className="mt-5 font-mono-custom text-[9px] uppercase tracking-[.1em] text-[#8f6a87]">{offerSettings.stackDiscounts ? 'Guests can combine early bird and contact savings.' : 'Guests receive only the larger of the early-bird or contact savings.'}</p>
+               </div>
               <div className="rounded-[1.4rem] border border-[#eac8df]/20 bg-[#302039] p-7"><div className="flex items-center gap-3"><Music2 size={19} className="text-[#86dce9]" /><h3 className="font-display text-2xl">Add a listening room track</h3></div><div className="mt-6 grid gap-3"><input value={newTrack.title} onChange={(event) => setNewTrack({ ...newTrack, title: event.target.value })} placeholder="track title" className="rounded-full border border-[#eac8df]/20 bg-transparent px-5 py-3 text-sm outline-none placeholder:text-[#8f6a87] focus:border-[#86dce9]" data-testid="input-new-track-title" /><input value={newTrack.link} onChange={(event) => setNewTrack({ ...newTrack, link: event.target.value })} placeholder="link (optional)" className="rounded-full border border-[#eac8df]/20 bg-transparent px-5 py-3 text-sm outline-none placeholder:text-[#8f6a87] focus:border-[#86dce9]" data-testid="input-new-track-link" /><button onClick={addTrack} className="mt-2 flex items-center justify-center gap-2 rounded-full bg-[#86dce9] px-5 py-3 text-[10px] font-bold uppercase tracking-[.12em] text-[#42194c]" data-testid="button-add-track"><Plus size={14} /> Add track</button></div></div>
               <div className="rounded-[1.4rem] border border-[#eac8df]/20 bg-[#302039] p-7"><div className="flex items-center gap-3"><ImagePlus size={19} className="text-[#f362b6]" /><h3 className="font-display text-2xl">Add to the visual archive</h3></div><div className="mt-6 grid gap-3"><input type="url" value={newImage} onChange={(event) => setNewImage(event.target.value)} placeholder="image URL" className="rounded-full border border-[#eac8df]/20 bg-transparent px-5 py-3 text-sm outline-none placeholder:text-[#8f6a87] focus:border-[#f362b6]" data-testid="input-new-image-url" /><button onClick={addImage} className="mt-2 flex items-center justify-center gap-2 rounded-full bg-[#f362b6] px-5 py-3 text-[10px] font-bold uppercase tracking-[.12em] text-[#42194c]" data-testid="button-add-image"><Plus size={14} /> Add image</button></div></div>
             </div>
