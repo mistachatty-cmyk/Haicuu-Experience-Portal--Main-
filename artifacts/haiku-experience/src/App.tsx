@@ -287,7 +287,7 @@ function App() {
             <a href="#listen" className="opacity-70 transition-opacity hover:opacity-100" data-testid="link-listen">Listen</a>
             <a href="#archive" className="opacity-70 transition-opacity hover:opacity-100" data-testid="link-archive">Archive</a>
           </div>
-          <button onClick={() => setPurchaseOpen(true)} className="group flex items-center gap-2 rounded-full bg-[#f465b9] px-4 py-2 text-[10px] font-bold uppercase tracking-[.16em] text-[#302039] transition-transform hover:-translate-y-0.5" data-testid="button-nav-reserve">
+           <button onClick={() => setPurchaseOpen(true)} className="group pressable flex items-center gap-2 rounded-full bg-[#f465b9] px-4 py-2 text-[10px] font-bold uppercase tracking-[.16em] text-[#302039] transition-transform hover:-translate-y-0.5" data-testid="button-nav-reserve">
             Reserve <ArrowUpRight size={13} className="transition-transform group-hover:rotate-45" />
           </button>
         </div>
@@ -312,7 +312,7 @@ function App() {
               A little music, a little magic, and a place to put your phone down.
             </p>
             <div className="reveal reveal-delay-3 mt-9 flex flex-wrap items-center gap-4">
-              <button onClick={() => setPurchaseOpen(true)} className="group inline-flex items-center gap-3 rounded-full bg-[#42194c] px-6 py-3.5 text-xs font-bold uppercase tracking-[.12em] text-[#ffeecf] shadow-[0_6px_0_#e74eaa] transition-all hover:-translate-y-1 hover:shadow-[0_10px_0_#e74eaa]" data-testid="button-hero-reserve">
+               <button onClick={() => setPurchaseOpen(true)} className="group pressable inline-flex items-center gap-3 rounded-full bg-[#42194c] px-6 py-3.5 text-xs font-bold uppercase tracking-[.12em] text-[#ffeecf] shadow-[0_6px_0_#e74eaa] transition-all hover:-translate-y-1 hover:shadow-[0_10px_0_#e74eaa]" data-testid="button-hero-reserve">
                 Reserve a place <Ticket size={16} className="transition-transform group-hover:rotate-12" />
               </button>
               <a href="#experience" className="group inline-flex items-center gap-2 px-2 py-3 text-xs font-bold uppercase tracking-[.12em] text-[#42194c]" data-testid="link-discover">
@@ -322,9 +322,9 @@ function App() {
           </div>
           <div className="relative mx-auto w-full max-w-[730px] reveal reveal-delay-2">
             <div className="absolute -inset-4 rounded-[2.2rem] border border-[#fff2de]/60 md:-inset-7" />
-            <div className="relative overflow-hidden rounded-[1.8rem] border-[7px] border-[#fff0df] bg-[#c2e6ed] shadow-[0_20px_0_rgba(127,28,102,.18),0_35px_70px_rgba(53,30,69,.22)]">
+             <div className="relative overflow-hidden rounded-[1.8rem] border-[7px] border-[#fff0df] bg-[#c2e6ed] shadow-[0_20px_0_rgba(127,28,102,.18),0_35px_70px_rgba(53,30,69,.22)] transition-transform duration-700 hover:-translate-y-1">
               <img src={bannerImage} alt="The Haiku Experience under a pink flowering tree" className="block aspect-[1.78] w-full object-cover transition-transform duration-1000 hover:scale-[1.035]" data-testid="img-hero-banner" />
-              <div className="absolute bottom-4 left-4 rounded-full bg-[#fff0df]/90 px-3 py-1.5 font-mono-custom text-[9px] uppercase tracking-[.18em] text-[#42194c] backdrop-blur-sm">September / doors at dusk</div>
+               <div className="absolute bottom-3 right-3 rounded-full bg-[#fff0df]/90 px-3 py-1.5 font-mono-custom text-[9px] uppercase tracking-[.12em] text-[#42194c] backdrop-blur-sm md:bottom-4 md:left-4 md:right-auto md:tracking-[.18em]">September / doors at dusk</div>
             </div>
             <div className="float-slow absolute -bottom-9 -left-4 z-20 w-24 rounded-[1.2rem] border-4 border-[#fff0df] bg-[#f362b6] p-2 shadow-[0_8px_0_rgba(127,28,102,.15)] md:-left-10 md:w-32">
               <img src={logoImage} alt="Llama State Productions seal" className="aspect-square w-full rounded-full object-cover" data-testid="img-hero-logo" />
@@ -354,13 +354,13 @@ function App() {
           <div className="relative">
             <div className="absolute -left-10 top-12 hidden h-24 w-24 rounded-full border-[10px] border-[#8edfea] lg:block" />
             <div className="grid gap-4 sm:grid-cols-2">
-              <article className="rounded-[1.4rem] bg-[#42194c] p-7 text-[#ffecd5] shadow-[0_8px_0_#e74eaa] sm:translate-y-8">
+               <article className="micro-lift rounded-[1.4rem] bg-[#42194c] p-7 text-[#ffecd5] shadow-[0_8px_0_#e74eaa] sm:translate-y-8">
                 <CalendarDays size={25} className="mb-12 text-[#f362b6]" />
                 <p className="section-label text-[#e7a5ca]">when</p>
                 <h3 className="mt-3 font-display text-4xl">{formatMonthYear(featuredEvent.date)}<br />{featuredEvent.name.replace('The ', '')}</h3>
                 <p className="mt-4 font-mono-custom text-[10px] uppercase leading-5 tracking-[.11em] text-[#f6c8df]">{formatEventDate(featuredEvent.date)}<br />doors at {featuredEvent.time}</p>
               </article>
-              <article className="rounded-[1.4rem] bg-[#8edfea] p-7 text-[#42194c] shadow-[0_8px_0_#6fc3d0]">
+               <article className="micro-lift rounded-[1.4rem] bg-[#8edfea] p-7 text-[#42194c] shadow-[0_8px_0_#6fc3d0]">
                 <MapPin size={25} className="mb-12" />
                 <p className="section-label">where</p>
                 <h3 className="mt-3 font-display text-4xl">The Llama<br />House</h3>
@@ -386,7 +386,7 @@ function App() {
           </div>
           <div className="lg:justify-self-end">
             <p className="mb-4 max-w-[320px] text-sm leading-6">Tickets appear in small batches. When the room is full, the door disappears.</p>
-            <button onClick={() => setPurchaseOpen(true)} className="group inline-flex items-center gap-3 rounded-full bg-[#42194c] px-6 py-3.5 text-xs font-bold uppercase tracking-[.12em] text-[#ffecd5] transition-transform hover:-translate-y-1" data-testid="button-band-reserve">
+             <button onClick={() => setPurchaseOpen(true)} className="group pressable inline-flex items-center gap-3 rounded-full bg-[#42194c] px-6 py-3.5 text-xs font-bold uppercase tracking-[.12em] text-[#ffecd5] transition-transform hover:-translate-y-1" data-testid="button-band-reserve">
               Enter the room <ChevronRight size={16} className="transition-transform group-hover:translate-x-1" />
             </button>
           </div>
@@ -406,7 +406,7 @@ function App() {
             {creatorTracks.map((track, index) => {
               const isPlaying = playing === track.id;
               return (
-                <article key={track.id} className="group grid grid-cols-[auto_1fr_auto] items-center gap-4 border-b border-[#eac8df]/25 py-6 md:grid-cols-[52px_1fr_1fr_auto] md:gap-7" data-testid={`card-track-${track.id}`}>
+                 <article key={track.id} className="group micro-row grid grid-cols-[auto_1fr_auto] items-center gap-4 border-b border-[#eac8df]/25 py-6 md:grid-cols-[52px_1fr_1fr_auto] md:gap-7" data-testid={`card-track-${track.id}`}>
                   <button onClick={() => setPlaying(isPlaying ? null : track.id)} className={`grid h-11 w-11 place-items-center rounded-full border transition-all ${isPlaying ? 'border-[#f362b6] bg-[#f362b6] text-[#42194c]' : 'border-[#86dce9] text-[#86dce9] hover:bg-[#86dce9] hover:text-[#42194c]'}`} data-testid={`button-play-track-${track.id}`} aria-label={isPlaying ? `Pause ${track.title}` : `Play ${track.title}`}>
                     {isPlaying ? <Pause size={16} /> : <Play size={16} className="ml-0.5" />}
                   </button>
@@ -440,7 +440,7 @@ function App() {
           </div>
           <div className="mt-16 grid gap-8 md:grid-cols-[1.1fr_.9fr_.82fr] md:items-start">
             {creatorGallery.map((item, index) => (
-              <button key={item.id} onClick={() => setLightbox(item)} className={`group text-left ${index === 0 ? 'md:mt-10' : ''} ${item.tone}`} data-testid={`button-gallery-${item.id}`}>
+               <button key={item.id} onClick={() => setLightbox(item)} className={`group micro-lift text-left ${index === 0 ? 'md:mt-10' : ''} ${item.tone}`} data-testid={`button-gallery-${item.id}`}>
                 <div className="relative overflow-hidden rounded-[1.3rem] border-[6px] border-[#fff3e5] bg-[#fff3e5] shadow-[0_10px_0_rgba(127,28,102,.13)]">
                   <img src={item.src} alt={item.alt} className="aspect-square w-full object-cover transition duration-700 group-hover:scale-105" data-testid={`img-gallery-${item.id}`} />
                   <div className="absolute inset-0 grid place-items-center bg-[#42194c]/0 transition-colors group-hover:bg-[#42194c]/35"><span className="scale-75 rounded-full bg-[#ffe06a] px-4 py-2 font-mono-custom text-[9px] uppercase tracking-[.12em] opacity-0 transition-all group-hover:scale-100 group-hover:opacity-100">open image</span></div>
@@ -459,7 +459,7 @@ function App() {
             <p className="section-label text-[#42194c]">a note for later</p>
             <h2 className="mt-5 max-w-[560px] font-display text-5xl leading-[.95] text-[#42194c] md:text-7xl">Missed this one?<br /><span className="text-[#f8eddf]">Keep the window open.</span></h2>
           </div>
-          <div className="rounded-[1.5rem] bg-[#f8eddf] p-6 shadow-[0_8px_0_rgba(66,25,76,.15)] md:p-8">
+           <div className="micro-lift rounded-[1.5rem] bg-[#f8eddf] p-6 shadow-[0_8px_0_rgba(66,25,76,.15)] md:p-8">
             {!waitlisted ? (
               <>
                 <p className="max-w-[330px] font-display text-2xl leading-tight text-[#42194c]">We only write when there is something worth leaving the house for.</p>
@@ -498,7 +498,7 @@ function App() {
 
       {purchaseOpen && (
         <div className="fixed inset-0 z-50 flex items-end justify-center bg-[#302039]/70 p-3 backdrop-blur-sm md:items-center" role="dialog" aria-modal="true" aria-label="Reserve your place">
-          <div className="relative w-full max-w-[560px] rounded-[1.8rem] bg-[#f8eddf] p-7 text-[#42194c] shadow-2xl md:p-10">
+          <div className="dialog-pop relative max-h-[calc(100dvh-1.5rem)] w-full max-w-[560px] overflow-y-auto rounded-[1.8rem] bg-[#f8eddf] p-7 text-[#42194c] shadow-2xl md:p-10">
             <button onClick={() => setPurchaseOpen(false)} className="absolute right-5 top-5 grid h-9 w-9 place-items-center rounded-full border border-[#d9bfd2] transition-colors hover:bg-[#f362b6]" data-testid="button-close-purchase" aria-label="Close reservation panel"><X size={17} /></button>
             {!reserved ? (
               <>
@@ -546,13 +546,13 @@ function App() {
       {lightbox && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#302039]/85 p-5 backdrop-blur-md" role="dialog" aria-modal="true" aria-label="Expanded archive image">
           <button onClick={() => setLightbox(null)} className="absolute right-5 top-5 grid h-11 w-11 place-items-center rounded-full border border-[#ffecd5]/40 text-[#ffecd5] transition-colors hover:bg-[#f362b6] hover:text-[#42194c]" data-testid="button-close-lightbox"><X size={20} /></button>
-          <div className="max-h-[90vh] max-w-[850px] text-center"><img src={lightbox.src} alt={lightbox.alt} className="max-h-[78vh] w-auto rounded-[1rem] border-4 border-[#ffecd5] object-contain shadow-2xl" data-testid="img-lightbox" /><p className="mt-5 font-mono-custom text-[10px] uppercase tracking-[.18em] text-[#ffecd5]">{lightbox.caption}</p></div>
+           <div className="dialog-pop max-h-[90vh] max-w-[850px] text-center"><img src={lightbox.src} alt={lightbox.alt} className="max-h-[78vh] w-auto rounded-[1rem] border-4 border-[#ffecd5] object-contain shadow-2xl" data-testid="img-lightbox" /><p className="mt-5 font-mono-custom text-[10px] uppercase tracking-[.18em] text-[#ffecd5]">{lightbox.caption}</p></div>
         </div>
       )}
 
       {unlockOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#302039]/80 p-5 backdrop-blur-sm" role="dialog" aria-modal="true" aria-label="Creator unlock">
-          <div className="w-full max-w-[420px] rounded-[1.6rem] bg-[#42194c] p-8 text-[#ffecd5] shadow-2xl">
+           <div className="dialog-pop max-h-[calc(100dvh-2rem)] w-full max-w-[420px] overflow-y-auto rounded-[1.6rem] bg-[#42194c] p-8 text-[#ffecd5] shadow-2xl">
             <div className="flex items-start justify-between"><div className="grid h-12 w-12 place-items-center rounded-full bg-[#f362b6] text-[#42194c]"><LockKeyhole size={21} /></div><button onClick={() => setUnlockOpen(false)} className="text-[#d9bfd2] hover:text-[#ffecd5]" data-testid="button-close-unlock" aria-label="Close creator unlock"><X size={18} /></button></div>
             <p className="section-label mt-8 text-[#86dce9]">quietly, for the maker</p>
             <h2 className="mt-3 font-display text-4xl leading-none">Is the room<br />really empty?</h2>
@@ -624,7 +624,7 @@ function App() {
         </section>
       )}
 
-      {toast && <div className="fixed bottom-5 left-1/2 z-[60] -translate-x-1/2 rounded-full bg-[#42194c] px-5 py-3 font-mono-custom text-[10px] uppercase tracking-[.1em] text-[#ffe06a] shadow-xl" role="status" data-testid="status-toast">{toast}</div>}
+      {toast && <div className="toast-in fixed bottom-5 left-1/2 z-[60] -translate-x-1/2 rounded-full bg-[#42194c] px-5 py-3 font-mono-custom text-[10px] uppercase tracking-[.1em] text-[#ffe06a] shadow-xl" role="status" data-testid="status-toast">{toast}</div>}
     </main>
   );
 }
