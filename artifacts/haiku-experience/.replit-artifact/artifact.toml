@@ -1,0 +1,28 @@
+kind = "web"
+previewPath = "/"
+title = "Haiku Experience"
+description = "A responsive event and music experience for Haiku Experience and Llama State Productions, with ticketing, waitlist signup, notifications, a visual gallery, listening room, and a discreet creator unlock area."
+version = "1.0.0"
+id = "artifacts/haiku-experience"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 24280
+
+[services.development]
+run = "pnpm --filter @workspace/haiku-experience run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/haiku-experience", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/haiku-experience/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "24280"
+BASE_PATH = "/"
