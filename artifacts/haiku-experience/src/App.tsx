@@ -314,19 +314,19 @@ function HomePage() {
         </div>
       </nav>
 
-      <section id="top" className="hero-mesh relative min-h-[760px] overflow-hidden px-5 pb-20 pt-32 md:min-h-[850px] md:px-10 md:pt-40">
+      <section id="top" className="hero-mesh relative min-h-[900px] overflow-hidden px-5 pb-20 pt-28 md:min-h-[900px] md:px-10 md:pt-36">
         <div className="absolute left-[-6%] top-36 h-44 w-44 rounded-full border border-[#9d256f]/25 md:h-72 md:w-72" />
         <div className="absolute left-[2%] top-44 h-32 w-32 rounded-full border border-[#9d256f]/20 md:h-56 md:w-56" />
         <div className="float-slow absolute right-[7%] top-28 z-10 hidden w-32 rotate-6 rounded-full bg-[#ffe36d] p-6 text-center shadow-[0_10px_0_rgba(111,50,106,.18)] md:block">
           <Sparkles size={18} className="mx-auto mb-2" />
           <p className="font-mono-custom text-[9px] uppercase leading-4 tracking-[.12em]">come as<br />you are</p>
         </div>
-         <div className="relative mx-auto grid max-w-[1320px] gap-12 lg:grid-cols-[.86fr_1.14fr] lg:items-center lg:gap-16">
-          <div className="relative z-10 max-w-[560px]">
+          <div className="relative mx-auto grid max-w-[1380px] gap-12 lg:grid-cols-[.68fr_1.32fr] lg:items-center lg:gap-10">
+           <div className="relative z-10 order-2 max-w-[510px] lg:order-1">
              <div className="reveal flex items-center gap-3 font-mono-custom text-[10px] uppercase tracking-[.2em] text-[#7f1c67]">
                <span className="pulse-dot h-2 w-2 rounded-full bg-[#ee4da7]" /> Next gathering / September 11, 2026
             </div>
-             <h1 className="hero-title reveal reveal-delay-1 mt-7 font-display text-[clamp(5.4rem,14vw,12.5rem)] font-semibold text-[#42194c] lg:text-[clamp(6rem,11vw,11rem)]">
+             <h1 className="hero-title reveal reveal-delay-1 mt-7 font-display text-[clamp(4.6rem,12vw,10.5rem)] font-semibold text-[#42194c] lg:text-[clamp(5.2rem,8.6vw,9.4rem)]">
               Haiku<br /><span className="ml-[.18em] text-[#e94fa9]">Experience</span>
             </h1>
              <p className="reveal reveal-delay-2 mt-9 max-w-[430px] font-display text-[1.35rem] leading-[1.15] text-[#613b68] md:text-[1.55rem]">
@@ -348,7 +348,7 @@ function HomePage() {
               </a>
             </div>
           </div>
-          <div className="relative mx-auto w-full max-w-[730px] reveal reveal-delay-2">
+           <div className="relative z-10 order-1 mx-auto w-full max-w-[900px] reveal reveal-delay-2 lg:order-2">
             <div className="absolute -inset-4 rounded-[2.2rem] border border-[#fff2de]/60 md:-inset-7" />
              <div className="relative overflow-hidden rounded-[1.8rem] border-[7px] border-[#fff0df] bg-[#c2e6ed] shadow-[0_20px_0_rgba(127,28,102,.18),0_35px_70px_rgba(53,30,69,.22)] transition-transform duration-700 hover:-translate-y-1">
                <img src={masqueradeImage} alt="The Masquerade of Words at Teller's Lounge for The Haicuu Experience" className="block aspect-[1.78] w-full object-cover transition-transform duration-1000 hover:scale-[1.035]" data-testid="img-hero-banner" />
