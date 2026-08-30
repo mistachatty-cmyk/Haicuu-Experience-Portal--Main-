@@ -52,7 +52,7 @@ function FlyerPage() {
         <div className="mx-auto flex max-w-[1320px] items-center justify-between px-5 py-4 md:px-10">
           <Link href="/archive" className="group flex items-center gap-3" data-testid="link-flyer-archive">
             <span className="grid h-9 w-9 place-items-center rounded-full border border-[#f362b6] font-display text-xl text-[#f362b6] transition-transform duration-500 group-hover:rotate-[-12deg]">H</span>
-            <span className="font-mono-custom text-[10px] uppercase tracking-[.22em] text-[#f6d8ea]">Llama State / <span className="text-[#7cdeed]">Haicuu</span></span>
+            <span className="font-mono-custom text-[10px] uppercase tracking-[.22em] text-[#f6d8ea]">Llamaste / <span className="text-[#7cdeed]">Haicuu</span></span>
           </Link>
           <Link href="/archive" className="inline-flex items-center gap-2 rounded-full bg-[#f465b9] px-4 py-2 font-mono-custom text-[10px] font-bold uppercase tracking-[.16em] text-[#302039]" data-testid="link-flyer-back">
             Archive <ArrowUpRight size={13} />

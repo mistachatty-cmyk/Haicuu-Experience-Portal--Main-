@@ -165,7 +165,7 @@ function ArchivePage() {
   useEffect(() => {
     const previousTitle = document.title;
     const metaValues = [
-      ['meta[name="description"]', 'A living scrapbook of flyers, photographs, sound, and community from The Haicuu Experience by Llama State Productions.'],
+      ['meta[name="description"]', 'A living scrapbook of flyers, photographs, sound, and community from The Haicuu Experience by Llamaste Productions.'],
       ['meta[property="og:title"]', 'The Archive | The Haicuu Experience'],
       ['meta[property="og:description"]', 'Explore the flyers, faces, and shared moments behind The Haicuu Experience.'],
       ['meta[name="twitter:title"]', 'The Archive | The Haicuu Experience'],
@@ -220,7 +220,7 @@ function ArchivePage() {
         <div className="mx-auto flex max-w-[1320px] items-center justify-between px-5 py-4 md:px-10">
           <Link href="/" className="group flex items-center gap-3" data-testid="link-archive-home">
             <span className="grid h-9 w-9 place-items-center rounded-full border border-[#f362b6] font-display text-xl text-[#f362b6] transition-transform duration-500 group-hover:rotate-[-12deg]">H</span>
-            <span className="font-mono-custom text-[10px] uppercase tracking-[.22em] text-[#f6d8ea]">Llama State / <span className="text-[#7cdeed]">Haicuu</span></span>
+            <span className="font-mono-custom text-[10px] uppercase tracking-[.22em] text-[#f6d8ea]">Llamaste / <span className="text-[#7cdeed]">Haicuu</span></span>
           </Link>
           <div className="hidden items-center gap-8 text-[11px] uppercase tracking-[.17em] md:flex">
             <Link href="/" className="opacity-70 transition-opacity hover:opacity-100" data-testid="link-archive-experience">The experience</Link>
@@ -252,7 +252,7 @@ function ArchivePage() {
           </div>
           <aside className="archive-hero__note reveal reveal-delay-3 rotate-2" data-testid="text-archive-note">
             <p className="section-label text-[#7f1c67]">an open box</p>
-            <p className="mt-5 font-display text-3xl leading-none text-[#42194c]">Collected by Cuju Josama<br /><span className="font-mono-custom text-[11px] uppercase tracking-[.12em]">spelled C-U-U-J-O</span><br />through Llama State Productions.</p>
+            <p className="mt-5 font-display text-3xl leading-none text-[#42194c]">Collected by Cuju Josama<br /><span className="font-mono-custom text-[11px] uppercase tracking-[.12em]">spelled C-U-U-J-O</span><br />through Llamaste Productions.</p>
             <div className="mt-8 flex items-center justify-between border-t border-[#7f1c67]/20 pt-4 font-mono-custom text-[9px] uppercase tracking-[.12em] text-[#7f1c67]">
               <span>{archiveItems.length} pieces</span><span>scroll / linger / return</span>
             </div>

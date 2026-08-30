@@ -63,8 +63,8 @@ function HostingPage() {
       <nav className="nav-blur fixed inset-x-0 top-0 z-40 border-b border-white/10 text-[#fbf0e4]" aria-label="Main navigation">
         <div className="mx-auto flex max-w-[1320px] items-center justify-between px-5 py-4 md:px-10">
           <Link href="/" className="group flex items-center gap-3" data-testid="link-hosting-home">
-            <img src={logoImage} alt="Llama State Productions" className="h-9 w-9 rounded-full object-cover transition-transform duration-500 group-hover:rotate-[-12deg] group-hover:scale-110" />
-            <span className="font-mono-custom text-[10px] uppercase tracking-[.22em] text-[#f6d8ea]">Llama State / <span className="text-[#7cdeed]">Haicuu</span></span>
+            <img src={logoImage} alt="Llamaste Productions" className="h-9 w-9 rounded-full object-cover transition-transform duration-500 group-hover:rotate-[-12deg] group-hover:scale-110" />
+            <span className="font-mono-custom text-[10px] uppercase tracking-[.22em] text-[#f6d8ea]">Llamaste / <span className="text-[#7cdeed]">Haicuu</span></span>
           </Link>
           <div className="hidden items-center gap-7 text-[11px] uppercase tracking-[.17em] md:flex">
             <Link href="/" className="opacity-70 transition-opacity hover:opacity-100" data-testid="link-hosting-experience">The experience</Link>
@@ -234,7 +234,7 @@ function HostingPage() {
                 <div className="mx-auto grid h-16 w-16 place-items-center rounded-full bg-[#f362b6] text-[#42194c]"><Check size={30} /></div>
                 <p className="section-label mt-7 text-[#86dce9]">the note arrived</p>
                 <h3 className="mt-3 font-display text-4xl">Beautiful. The room is listening.</h3>
-                <p className="mx-auto mt-4 max-w-[380px] text-sm leading-6 text-[#d9bfd2]">Your hosting inquiry is queued for Llama State Productions. We’ll reply using the email you shared. No payment was taken and no booking has been made.</p>
+                <p className="mx-auto mt-4 max-w-[380px] text-sm leading-6 text-[#d9bfd2]">Your hosting inquiry is queued for Llamaste Productions. We’ll reply using the email you shared. No payment was taken and no booking has been made.</p>
                 <button type="button" onClick={() => setInquirySent(false)} className="mt-7 rounded-full border border-[#eac8df]/30 px-5 py-3 font-mono-custom text-[10px] uppercase tracking-[.12em] text-[#ffecd5] transition-colors hover:border-[#f362b6]" data-testid="button-edit-hosting-inquiry">Send another note</button>
               </div>
             )}
@@ -246,7 +246,7 @@ function HostingPage() {
         <div className="mx-auto max-w-[1180px]">
           <div className="flex flex-col justify-between gap-12 border-b border-[#eac8df]/20 pb-14 md:flex-row">
             <div>
-              <img src={logoImage} alt="Llama State Productions" className="h-20 w-20 rounded-full object-cover" data-testid="img-hosting-footer-logo" />
+              <img src={logoImage} alt="Llamaste Productions" className="h-20 w-20 rounded-full object-cover" data-testid="img-hosting-footer-logo" />
               <p className="mt-5 max-w-[330px] font-display text-3xl leading-none text-[#f362b6]">Make room<br />for the unexpected.</p>
             </div>
             <div className="grid grid-cols-2 gap-x-14 gap-y-4 self-end font-mono-custom text-[10px] uppercase tracking-[.15em] text-[#cc9fbd]">
@@ -257,7 +257,7 @@ function HostingPage() {
             </div>
           </div>
           <div className="flex flex-col justify-between gap-3 pt-6 font-mono-custom text-[9px] uppercase tracking-[.14em] text-[#8f6a87] md:flex-row">
-            <span>Llama State Productions / est. 1998</span><span>Haicuu / hosted by Cujo Sama</span>
+            <span>Llamaste Productions / est. 1998</span><span>Haicuu / hosted by Cujo Sama</span>
           </div>
         </div>
       </footer>

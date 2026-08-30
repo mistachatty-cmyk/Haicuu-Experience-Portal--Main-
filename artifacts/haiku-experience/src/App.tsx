@@ -55,15 +55,15 @@ const GALLERY_STORAGE_KEY = 'haiku-experience-gallery';
 const MASQUERADE_ADDRESS = '117 Division Ave S, Grand Rapids, MI 49503';
 
 const initialTracks: Track[] = [
-  { id: 1, title: 'Clouds in the Kitchen', artist: 'Llama State Radio 01', note: 'for making tea at midnight', link: '#' },
-  { id: 2, title: 'Soft Machinery', artist: 'Llama State Radio 02', note: 'a small beat for a long walk', link: '#' },
-  { id: 3, title: 'The Sun Forgot', artist: 'Llama State Radio 03', note: 'play this one with the window open', link: '#' },
+  { id: 1, title: 'Clouds in the Kitchen', artist: 'Llamaste Radio 01', note: 'for making tea at midnight', link: '#' },
+  { id: 2, title: 'Soft Machinery', artist: 'Llamaste Radio 02', note: 'a small beat for a long walk', link: '#' },
+  { id: 3, title: 'The Sun Forgot', artist: 'Llamaste Radio 03', note: 'play this one with the window open', link: '#' },
 ];
 
 const initialGallery: GalleryItem[] = [
   { id: 1, src: posterImage, alt: 'A pastel poster for The Haicuu Experience', caption: 'the invitation / 2024', tone: 'rotate-[-2deg]' },
   { id: 2, src: masqueradeImage, alt: 'The Masquerade of Words event artwork for The Haicuu Experience', caption: 'the next mask / september 11', tone: 'rotate-[1.5deg]' },
-  { id: 3, src: logoImage, alt: 'The Llama State Productions circular logo', caption: 'the keeper / est. 1998', tone: 'rotate-[-1deg]' },
+  { id: 3, src: logoImage, alt: 'The Llamaste Productions circular logo', caption: 'the keeper / est. 1998', tone: 'rotate-[-1deg]' },
 ];
 
 const initialEvents: ExperienceEvent[] = [
@@ -124,6 +124,29 @@ function readStored<T>(key: string, fallback: T): T {
   }
 }
 
+function normalizeBranding(value: string) {
+  return value.replace(/Llama State/gi, 'Llamaste').replace(/Llamamaste/gi, 'Llamaste');
+}
+
+function readExperienceTracks() {
+  const stored = readStored<Track[] | null>(TRACKS_STORAGE_KEY, null);
+  if (!stored?.length) return initialTracks;
+  return stored.map((track) => ({
+    ...track,
+    artist: normalizeBranding(track.artist),
+  }));
+}
+
+function readExperienceGallery() {
+  const stored = readStored<GalleryItem[] | null>(GALLERY_STORAGE_KEY, null);
+  if (!stored?.length) return initialGallery;
+  return stored.map((item) => ({
+    ...item,
+    alt: normalizeBranding(item.alt),
+    caption: normalizeBranding(item.caption),
+  }));
+}
+
 function formatEventDate(date: string) {
   return new Intl.DateTimeFormat('en-US', {
     month: 'long',
@@ -163,8 +186,8 @@ function HomePage() {
   const [unlocked, setUnlocked] = useState(false);
   const [code, setCode] = useState('');
   const [codeError, setCodeError] = useState('');
-  const [creatorTracks, setCreatorTracks] = useState<Track[]>(() => readStored(TRACKS_STORAGE_KEY, initialTracks));
-  const [creatorGallery, setCreatorGallery] = useState<GalleryItem[]>(() => readStored(GALLERY_STORAGE_KEY, initialGallery));
+  const [creatorTracks, setCreatorTracks] = useState<Track[]>(readExperienceTracks);
+  const [creatorGallery, setCreatorGallery] = useState<GalleryItem[]>(readExperienceGallery);
   const [newTrack, setNewTrack] = useState({ title: '', link: '' });
   const [newImage, setNewImage] = useState('');
   const [newEvent, setNewEvent] = useState({
@@ -282,7 +305,7 @@ function HomePage() {
     if (!newTrack.title.trim()) return;
     setCreatorTracks((current) => [
       ...current,
-      { id: Date.now(), title: newTrack.title.trim(), artist: 'Llama State Radio / new', note: 'just added to the room', link: newTrack.link || '#' },
+      { id: Date.now(), title: newTrack.title.trim(), artist: 'Llamaste Radio / new', note: 'just added to the room', link: newTrack.link || '#' },
     ]);
     setNewTrack({ title: '', link: '' });
     showToast('Track tucked into the listening room.');
@@ -303,8 +326,8 @@ function HomePage() {
       <nav className="nav-blur fixed inset-x-0 top-0 z-40 border-b border-white/10 text-[#fbf0e4]" aria-label="Main navigation">
         <div className="mx-auto flex max-w-[1320px] items-center justify-between px-5 py-4 md:px-10">
           <a href="#top" className="group flex items-center gap-3" data-testid="link-home">
-            <img src={logoImage} alt="Llama State Productions" className="h-9 w-9 rounded-full object-cover transition-transform duration-500 group-hover:rotate-[-12deg] group-hover:scale-110" />
-            <span className="font-mono-custom text-[10px] uppercase tracking-[.22em] text-[#f6d8ea]">Llama State / <span className="text-[#7cdeed]">Haicuu</span></span>
+            <img src={logoImage} alt="Llamaste Productions" className="h-9 w-9 rounded-full object-cover transition-transform duration-500 group-hover:rotate-[-12deg] group-hover:scale-110" />
+            <span className="font-mono-custom text-[10px] uppercase tracking-[.22em] text-[#f6d8ea]">Llamaste / <span className="text-[#7cdeed]">Haicuu</span></span>
           </a>
           <div className="hidden items-center gap-8 text-[11px] uppercase tracking-[.17em] md:flex">
             <a href="#experience" className="opacity-70 transition-opacity hover:opacity-100" data-testid="link-experience">The experience</a>
@@ -366,7 +389,7 @@ function HomePage() {
                Open the Masquerade flyer <ArrowUpRight size={14} />
              </Link>
             <div className="float-slow absolute -bottom-9 -left-4 z-20 w-24 rounded-[1.2rem] border-4 border-[#fff0df] bg-[#f362b6] p-2 shadow-[0_8px_0_rgba(127,28,102,.15)] md:-left-10 md:w-32">
-              <img src={logoImage} alt="Llama State Productions seal" className="aspect-square w-full rounded-full object-cover" data-testid="img-hero-logo" />
+              <img src={logoImage} alt="Llamaste Productions seal" className="aspect-square w-full rounded-full object-cover" data-testid="img-hero-logo" />
             </div>
           </div>
         </div>
@@ -525,7 +548,7 @@ function HomePage() {
         <div className="mx-auto max-w-[1180px]">
           <div className="flex flex-col justify-between gap-12 border-b border-[#eac8df]/20 pb-14 md:flex-row">
             <div>
-              <img src={logoImage} alt="Llama State Productions" className="h-20 w-20 rounded-full object-cover" data-testid="img-footer-logo" />
+              <img src={logoImage} alt="Llamaste Productions" className="h-20 w-20 rounded-full object-cover" data-testid="img-footer-logo" />
                <p className="mt-5 max-w-[300px] font-display text-3xl leading-none text-[#f362b6]">Make room<br />for wonder.</p>
             </div>
             <div className="grid grid-cols-2 gap-x-14 gap-y-4 self-end font-mono-custom text-[10px] uppercase tracking-[.15em] text-[#cc9fbd]">
@@ -537,7 +560,7 @@ function HomePage() {
             </div>
           </div>
           <div className="flex flex-col justify-between gap-3 pt-6 font-mono-custom text-[9px] uppercase tracking-[.14em] text-[#8f6a87] md:flex-row">
-             <span>Llama State Productions / est. 1998</span><span>Llamamaste</span>
+             <span>Llamaste Productions / est. 1998</span><span>Llamaste</span>
           </div>
         </div>
       </footer>
