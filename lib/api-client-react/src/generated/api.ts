@@ -141,7 +141,7 @@ export const getSubmitHostingInquiryUrl = () => {
 }
 
 /**
- * Stores a hosting inquiry for the Llama State Productions team to review. This does not create a booking or take payment.
+ * Stores a hosting inquiry for the Llamaste Productions team to review. This does not create a booking or take payment.
  * @summary Submit a hosting inquiry
  */
 export const submitHostingInquiry = async (hostingInquiryInput: HostingInquiryInput, options?: Parameters<typeof customFetch>[1]): Promise<HostingInquiryAccepted> => {
@@ -213,7 +213,7 @@ export const getListHostingInquiriesUrl = () => {
 }
 
 /**
- * Returns the secured internal queue for the Llama State Productions team.
+ * Returns the secured internal queue for the Llamaste Productions team.
  * @summary List received hosting inquiries
  */
 export const listHostingInquiries = async ( options?: Parameters<typeof customFetch>[1]): Promise<HostingInquiryRecord[]> => {

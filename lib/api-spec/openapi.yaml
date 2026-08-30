@@ -31,7 +31,7 @@ paths:
       operationId: submitHostingInquiry
       tags: [hosting]
       summary: Submit a hosting inquiry
-      description: Stores a hosting inquiry for the Llama State Productions team to review. This does not create a booking or take payment.
+      description: Stores a hosting inquiry for the Llamaste Productions team to review. This does not create a booking or take payment.
       requestBody:
         required: true
         content:
@@ -61,7 +61,7 @@ paths:
       operationId: listHostingInquiries
       tags: [hosting]
       summary: List received hosting inquiries
-      description: Returns the secured internal queue for the Llama State Productions team.
+      description: Returns the secured internal queue for the Llamaste Productions team.
       security:
         - AdminKeyAuth: []
       responses:

@@ -1,0 +1,1 @@
+- [GitHub repository sync](github-sync.md) — The configured connection may read GitHub but reject repository writes; verify write capability before syncing.
