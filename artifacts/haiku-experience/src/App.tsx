@@ -300,12 +300,12 @@ function App() {
           <Sparkles size={18} className="mx-auto mb-2" />
           <p className="font-mono-custom text-[9px] uppercase leading-4 tracking-[.12em]">come as<br />you are</p>
         </div>
-        <div className="relative mx-auto grid max-w-[1320px] gap-12 lg:grid-cols-[.76fr_1.24fr] lg:items-center">
+         <div className="relative mx-auto grid max-w-[1320px] gap-12 lg:grid-cols-[.86fr_1.14fr] lg:items-center lg:gap-16">
           <div className="relative z-10 max-w-[560px]">
             <div className="reveal flex items-center gap-3 font-mono-custom text-[10px] uppercase tracking-[.2em] text-[#7f1c67]">
               <span className="pulse-dot h-2 w-2 rounded-full bg-[#ee4da7]" /> A soft gathering by Llama State Productions
             </div>
-            <h1 className="hero-title reveal reveal-delay-1 mt-7 font-display text-[clamp(5.4rem,14vw,12.5rem)] font-semibold text-[#42194c]">
+             <h1 className="hero-title reveal reveal-delay-1 mt-7 font-display text-[clamp(5.4rem,14vw,12.5rem)] font-semibold text-[#42194c] lg:text-[clamp(6rem,11vw,11rem)]">
               Haiku<br /><span className="ml-[.18em] text-[#e94fa9]">Experience</span>
             </h1>
             <p className="reveal reveal-delay-2 mt-9 max-w-[390px] font-display text-[1.35rem] leading-[1.15] text-[#613b68] md:text-[1.55rem]">
@@ -324,7 +324,7 @@ function App() {
             <div className="absolute -inset-4 rounded-[2.2rem] border border-[#fff2de]/60 md:-inset-7" />
              <div className="relative overflow-hidden rounded-[1.8rem] border-[7px] border-[#fff0df] bg-[#c2e6ed] shadow-[0_20px_0_rgba(127,28,102,.18),0_35px_70px_rgba(53,30,69,.22)] transition-transform duration-700 hover:-translate-y-1">
               <img src={bannerImage} alt="The Haiku Experience under a pink flowering tree" className="block aspect-[1.78] w-full object-cover transition-transform duration-1000 hover:scale-[1.035]" data-testid="img-hero-banner" />
-               <div className="absolute bottom-3 right-3 rounded-full bg-[#fff0df]/90 px-3 py-1.5 font-mono-custom text-[9px] uppercase tracking-[.12em] text-[#42194c] backdrop-blur-sm md:bottom-4 md:left-4 md:right-auto md:tracking-[.18em]">September / doors at dusk</div>
+               <div className="absolute bottom-3 right-3 rounded-full bg-[#fff0df]/90 px-3 py-1.5 font-mono-custom text-[9px] uppercase tracking-[.12em] text-[#42194c] backdrop-blur-sm md:bottom-4 md:right-4 md:tracking-[.18em]">September / doors at dusk</div>
             </div>
             <div className="float-slow absolute -bottom-9 -left-4 z-20 w-24 rounded-[1.2rem] border-4 border-[#fff0df] bg-[#f362b6] p-2 shadow-[0_8px_0_rgba(127,28,102,.15)] md:-left-10 md:w-32">
               <img src={logoImage} alt="Llama State Productions seal" className="aspect-square w-full rounded-full object-cover" data-testid="img-hero-logo" />
